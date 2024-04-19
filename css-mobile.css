@@ -1,0 +1,60 @@
+@media only screen and (min-width: 400px) {
+	#fullscreen-hero{
+		max-height: 100%;
+	}
+	
+	.hero-content h2{
+		max-width: 600px;
+		padding-top: 50px;
+		font-size: 3rem;
+	}
+	.hero-content h1{
+		
+		font-size: 6rem;
+		padding-bottom: 100px;
+	}
+	h3.headline-5, .headline-4 {
+		font-size: 1.5rem;
+	}
+	.learn-more{
+		bottom: 09%;
+		font-size: 2.5rem;
+	}
+	nav#navbar{
+		display: none;
+	}
+	h3.about-statement{
+		font-size: 20px;
+	}
+	.about-statement {
+		margin: 10px 0px;
+		padding-bottom: 60px;
+	}
+	title p, p.text-2.\.mr-job, p.text-2 {
+		padding-right: 0px;
+
+	}
+	.col-12.col-md-6.mb-3.mb-lg-4.mb-xl-6{
+		flex: auto;
+		max-width: 85%;
+		margin: auto;
+		
+	}
+	.col-12.col-md-6.mb-2.mb-lg-2.mb-xl-2{
+		flex: auto;
+		max-width: 95%;
+		margin: auto;
+		padding-right: 0px;
+		padding-bottom: 30px;
+
+	}
+	.skills__skill{
+		font-size: 1.75rem;
+	}
+	.skills{
+		max-width: 730px;
+	}
+	.new-container{
+		margin-left: 0px;
+	}
+  }
