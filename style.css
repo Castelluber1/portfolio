@@ -1070,4 +1070,8 @@ footer a:hover {
 	p.text-2.alignment {
 		padding: 0px 20px;
 	}
+	h3.text-2 {
+		font-size: 1.2rem;
+		padding: 0px 5px 15px 5px;
+	}
 }
