@@ -1058,6 +1058,9 @@ footer a:hover {
 	.copyright {
    		 width: 90%;
 	}
+	#contact a {
+   		 padding: 30px 0 30px 0;
+	}
 	
 	
 }
