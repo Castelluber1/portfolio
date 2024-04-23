@@ -1060,4 +1060,14 @@ footer a:hover {
 	.copyright {
 		width: 90%;
 	}
+	iframe {
+		width: 380px;
+		height: 650px;
+	}
+	h3.headline-4.l-cat {
+		margin-bottom: 30px;
+	}
+	p.text-2.alignment {
+		padding: 0px 20px;
+	}
 }
