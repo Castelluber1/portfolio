@@ -386,6 +386,8 @@ h2.project-tn-heading,
 .home-hero {
 	background-image: url(home-hero.jpg);
 }
+
+.mortgage-calculator-hero,
 .mortgage-calculator {
 	background-image: url(mortgage-calculator-thumb.jpg);
 }
@@ -398,7 +400,7 @@ h2.project-tn-heading,
 }
 
 .website-review-hero {
-	background-image: url(scott-graham-5fNmWej4tAA-unsplash.jpg);
+	background-image: url(website-review-thumb.jpg);
 }
 
 .project-tn-sub {
@@ -506,7 +508,6 @@ footer a:hover {
 .mobile-button {
 	display: none;
 }
-
 
 @media screen and (min-width: 576px) {
 	.hero-container {
@@ -1024,44 +1025,3 @@ footer a:hover {
 		font-size: 1rem;
 	}
 }
-@media (max-width: 415px) {
-	.hero-container {
-		 height: 90%;
-	}
-	.headline-2 {
- 		   font-size: 2rem;
-	}
-	h3.about-statement {
-   		 font-size: 1.4rem;
-   		 letter-spacing: 1px;
-	}
-	h3.headline-5, .headline-4 {
-   		 font-size: 1.2rem;
-	}
-	.title p {
-    		font-size: 1.0rem;
-	}
-	.col-12.col-md-6.mb-2.mb-lg-2.mb-xl-2 {
-    		padding-right: 35px;
-    		padding-left: 35px;
-		padding-bottom: 0px;
-	}
-	.skills {
-    		max-width: 330px;
-	}
-	.skills__skill {
-   		 font-size: 0.8rem;
-	}
-	#work {
-    		padding-top: 60px;
-	}
-	.copyright {
-   		 width: 90%;
-	}
-	#contact a {
-   		 padding: 30px 0 30px 0;
-	}
-	
-	
-}
-
