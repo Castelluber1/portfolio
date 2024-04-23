@@ -1025,3 +1025,39 @@ footer a:hover {
 		font-size: 1rem;
 	}
 }
+@media (max-width: 415px) {
+	.hero-container {
+		height: 90%;
+	}
+	.headline-2 {
+		font-size: 2rem;
+	}
+	h3.about-statement {
+		font-size: 1.4rem;
+		letter-spacing: 1px;
+	}
+	h3.headline-5,
+	.headline-4 {
+		font-size: 1.2rem;
+	}
+	.title p {
+		font-size: 1rem;
+	}
+	.col-12.col-md-6.mb-2.mb-lg-2.mb-xl-2 {
+		padding-right: 35px;
+		padding-left: 35px;
+		padding-bottom: 0px;
+	}
+	.skills {
+		max-width: 330px;
+	}
+	.skills__skill {
+		font-size: 0.8rem;
+	}
+	#work {
+		padding-top: 60px;
+	}
+	.copyright {
+		width: 90%;
+	}
+}
