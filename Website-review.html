@@ -1,31 +1,33 @@
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Castelluber Portfolio</title>
-	<link rel="stylesheet" href="style.css" />
-	<script src="https://use.fontawesome.com/7d8442061a.js"></script>
-	<meta content="width=device-width, initial-scale=1" name="viewport" />
-	<script src="script.js"></script>
-	<script
-		src="https://kit.fontawesome.com/ad2652e0c6.js"
-		crossorigin="anonymous"></script>
-</head>
-<body>
-	<header id="home">
-		<div id="projects-hero" class="hero website-review-hero">
-			<div class="hero-container" id="top">
-				<div class="hero-content">
-					<h1>Website Review</h1>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>The website review projects</title>
+		<link rel="stylesheet" href="style.css" />
+		<!-- <script src="https://use.fontawesome.com/7d8442061a.js"></script> -->
+		<meta content="width=device-width, initial-scale=1" name="viewport" />
+		<script src="script.js"></script>
+		<script
+			src="https://kit.fontawesome.com/ad2652e0c6.js"
+			crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<header id="home">
+			<div id="projects-hero" class="hero website-review-hero">
+				<div class="hero-container" id="top">
+					<div class="hero-content">
+						<h1>Website Review</h1>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<!-- ddd -->
-	</header>
-	<body>
+			<!-- ddd -->
+		</header>
+
 		<nav class="" id="navbar">
 			<div class="logo">
-				<a href="castelluber.com"> <p>Kyle Castelluber</p></a>
+				<a href="/"> <p>Kyle Castelluber</p></a>
 			</div>
 			<div>
 				<a href="#context">context</a>
@@ -315,35 +317,36 @@
 				scrollOffset: 40,
 			});
 		</script>
-	</body>
-	<footer id="contact">
-		<div class="logo">
-			<a href="mailto:caiocastelluber@gmail.com">caiocastelluber@gmail.com</a>
-		</div>
-		<div>
-			<!-- <a href="#about">Resume</a> -->
-			<a href="#process">LinkedIn</a>
-			<!-- <a href="#contact">Contact</a> -->
-		</div>
-		<p class="copyright">
-			Website design and development © 2024 Kyle Castelluber.
-		</p>
-	</footer>
 
-	<script>
-		window.onscroll = function () {
-			myFunction();
-		};
+		<footer id="contact">
+			<div class="logo">
+				<a href="mailto:caiocastelluber@gmail.com">caiocastelluber@gmail.com</a>
+			</div>
+			<div>
+				<!-- <a href="#about">Resume</a> -->
+				<a href="#process">LinkedIn</a>
+				<!-- <a href="#contact">Contact</a> -->
+			</div>
+			<p class="copyright">
+				Website design and development © 2024 Kyle Castelluber.
+			</p>
+		</footer>
 
-		var navbar = document.getElementById("navbar");
-		var sticky = navbar.offsetTop;
+		<script>
+			window.onscroll = function () {
+				myFunction();
+			};
 
-		function myFunction() {
-			if (window.pageYOffset >= sticky) {
-				navbar.classList.add("sticky");
-			} else {
-				navbar.classList.remove("sticky");
+			var navbar = document.getElementById("navbar");
+			var sticky = navbar.offsetTop;
+
+			function myFunction() {
+				if (window.pageYOffset >= sticky) {
+					navbar.classList.add("sticky");
+				} else {
+					navbar.classList.remove("sticky");
+				}
 			}
-		}
-	</script>
-</body>
+		</script>
+	</body>
+</html>
