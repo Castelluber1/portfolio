@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caio Castelluber — Automação com IA e n8n</title>
+  <meta name="description" content="Construo automações com n8n e IA que eliminam trabalho manual e conectam seus sistemas. Caso real: onboarding de clientes de 3 horas para 3 minutos." />
+  <link rel="canonical" href="https://www.castelluber.com/automacao" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%236366f1'/><text y='22' x='6' font-size='18' font-family='sans-serif' fill='white' font-weight='bold'>C.</text></svg>" />
+  <meta property="og:title" content="Caio Castelluber — Automação com IA e n8n" />
+  <meta property="og:description" content="Construo automações com n8n e IA que eliminam trabalho manual e conectam seus sistemas. Veja o caso da UP Immigration: onboarding de 3 horas para 3 minutos." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.castelluber.com/automacao" />
+  <meta property="og:locale" content="pt_BR" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <!-- three.min.js foi removido do pacote a partir do r160 — a 0.149 é a última versão estável desse build -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #07070d;
+      --bg2: #0c0c17;
+      --indigo: #6366f1;
+      --cyan: #06b6d4;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --white: #eeeeff;
+      --muted: #7777aa;
+      --card-bg: rgba(255,255,255,0.03);
+      --card-border: rgba(255,255,255,0.07);
+    }
+
+    html { overflow-x: hidden; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+    code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 2.5rem;
+      background: rgba(7,7,13,0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, var(--indigo), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    #hero-canvas { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.07) 0%, transparent 70%); }
+
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 800px; padding: 0 2rem;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      border: 1px solid rgba(99,102,241,0.4); border-radius: 999px;
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--indigo); margin-bottom: 2rem;
+      background: rgba(99,102,241,0.07);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan); animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:0.3; transform:scale(0.6); }
+    }
+
+    h1.hero-title {
+      font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+      font-weight: 700; line-height: 1.1; letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--indigo) 0%, var(--cyan) 45%, #a78bfa 70%, var(--indigo) 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: gradient-shift 6s ease-in-out infinite;
+    }
+    @keyframes gradient-shift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 560px; margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    /* Floating notification cards */
+    .float-card {
+      position: absolute; z-index: 2;
+      background: rgba(13,13,24,0.88);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.7rem 1rem;
+      font-size: 0.78rem;
+      display: flex; align-items: center; gap: 0.6rem;
+      backdrop-filter: blur(12px);
+      white-space: nowrap;
+      will-change: transform;
+    }
+    .float-card .dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .float-card.c1 { top: 22%; left: 7%; border-color: rgba(16,185,129,0.3); }
+    .float-card.c1 .dot { background: var(--emerald); box-shadow: 0 0 8px var(--emerald); }
+    .float-card.c2 { top: 34%; right: 8%; border-color: rgba(99,102,241,0.3); }
+    .float-card.c2 .dot { background: var(--indigo); box-shadow: 0 0 8px var(--indigo); }
+    .float-card.c3 { bottom: 30%; left: 9%; border-color: rgba(6,182,212,0.3); }
+    .float-card.c3 .dot { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+    .float-card.c4 { bottom: 22%; right: 10%; border-color: rgba(245,158,11,0.3); }
+    .float-card.c4 .dot { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+
+    .float-label { color: var(--muted); }
+    .float-value { color: var(--white); font-weight: 600; }
+
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      color: var(--muted); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; z-index: 1;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--indigo), transparent);
+      animation: scroll-anim 2s ease-in-out infinite;
+    }
+    @keyframes scroll-anim {
+      0%,100% { transform:scaleY(1); opacity:1; }
+      50% { transform:scaleY(0.4); opacity:0.3; }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 7rem 2rem; }
+    .container { max-width: 1140px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--cyan); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(1.9rem, 3.8vw, 3rem); font-weight: 700;
+      letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 1.25rem;
+    }
+    .section-sub {
+      font-size: 1rem; color: var(--muted); max-width: 540px; line-height: 1.75;
+    }
+
+    /* ── PROBLEMA ── */
+    #problema { background: var(--bg2); border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
+
+    .problema-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+      align-items: center; margin-top: 4rem;
+    }
+    .problema-left p {
+      font-size: 1.05rem; color: var(--muted); line-height: 1.8;
+      margin-bottom: 1.25rem;
+    }
+    .problema-left p strong { color: var(--white); }
+    .problema-left .highlight-block {
+      border-left: 2px solid var(--indigo);
+      padding-left: 1.25rem; margin: 2rem 0;
+      font-size: 1.1rem; font-weight: 500; color: var(--white);
+      line-height: 1.6;
+    }
+
+    /* Inbox visual */
+    .inbox-visual {
+      background: rgba(13,13,24,0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 16px; overflow: hidden;
+      position: relative;
+    }
+    .inbox-bar {
+      background: rgba(255,255,255,0.04);
+      padding: 0.75rem 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .inbox-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .inbox-dot.r { background: #ff5f57; }
+    .inbox-dot.y { background: #febc2e; }
+    .inbox-dot.g { background: #28c840; }
+    .inbox-title { font-size: 0.75rem; color: var(--muted); margin-left: auto; margin-right: auto; font-family: 'JetBrains Mono', monospace; }
+    .inbox-list { padding: 0.5rem 0; }
+    .inbox-item {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      transition: background 0.2s;
+    }
+    .inbox-item:hover { background: rgba(255,255,255,0.03); }
+    .inbox-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 700; flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .inbox-body { flex: 1; min-width: 0; }
+    .inbox-from { font-size: 0.75rem; font-weight: 600; color: var(--white); }
+    .inbox-subject { font-size: 0.72rem; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .inbox-time { font-size: 0.65rem; color: var(--muted); flex-shrink: 0; }
+    .inbox-unread .inbox-from { color: var(--white); }
+    .unread-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--indigo); margin-top: 6px; flex-shrink: 0; }
+    .inbox-counter {
+      text-align: center; padding: 0.75rem;
+      font-size: 0.72rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .inbox-counter span { color: #ef4444; font-weight: 700; }
+
+    /* ── HORIZONTAL SCROLL ── */
+    #h-section {
+      height: 100vh;
+      overflow: hidden;
+      padding: 0;
+      position: relative;
+    }
+    .h-track {
+      display: flex;
+      height: 100%;
+      will-change: transform;
+    }
+    .h-panel {
+      width: 100vw;
+      height: 100%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      position: relative;
+    }
+    .h-panel-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .h-panel-text { }
+    .h-step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.15em; color: var(--indigo);
+      margin-bottom: 1rem; text-transform: uppercase;
+    }
+    .h-panel-text h2 {
+      font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700;
+      letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 1rem;
+    }
+    .h-panel-text p {
+      font-size: 1rem; color: var(--muted); line-height: 1.75; max-width: 420px;
+    }
+    .h-tech-tags {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem;
+    }
+    .h-tag {
+      padding: 0.3rem 0.75rem;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      font-size: 0.72rem; font-weight: 600;
+      color: var(--muted); font-family: 'JetBrains Mono', monospace;
+      background: var(--card-bg);
+    }
+    .h-tag.active { border-color: rgba(99,102,241,0.4); color: var(--indigo); background: rgba(99,102,241,0.07); }
+
+    /* Panel progress indicator */
+    .h-progress {
+      position: absolute;
+      bottom: 3rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.5rem; z-index: 10;
+    }
+    .h-progress-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      transition: background 0.3s, width 0.3s;
+    }
+    .h-progress-dot.active { background: var(--indigo); width: 20px; border-radius: 3px; }
+
+    /* Section label for horizontal */
+    .h-section-label {
+      position: absolute;
+      top: 50%; left: 2.5rem;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.15);
+      white-space: nowrap;
+    }
+
+    /* ── PANEL VISUALS ── */
+
+    /* Panel 1: Form visual */
+    .visual-box {
+      background: rgba(13,13,24,0.95);
+      border: 1px solid var(--card-border);
+      border-radius: 16px; overflow: hidden;
+    }
+    .visual-titlebar {
+      background: rgba(255,255,255,0.04);
+      padding: 0.7rem 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .vdot { width: 10px; height: 10px; border-radius: 50%; }
+    .vdot.r { background: #ff5f57; }
+    .vdot.y { background: #febc2e; }
+    .vdot.g { background: #28c840; }
+    .vtitle { font-size: 0.72rem; color: var(--muted); margin: 0 auto; font-family: 'JetBrains Mono', monospace; }
+    .visual-body { padding: 1.5rem; }
+
+    .form-field { margin-bottom: 1rem; }
+    .form-field-label { font-size: 0.7rem; font-weight: 600; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .form-field-input {
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--card-border);
+      border-radius: 8px; font-size: 0.85rem; color: var(--white);
+      background: rgba(255,255,255,0.04);
+      font-family: 'Inter', sans-serif;
+    }
+    .form-submit-btn {
+      width: 100%; padding: 0.7rem;
+      background: linear-gradient(135deg, var(--indigo), #818cf8);
+      border: none; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 700; color: white;
+      cursor: pointer; margin-top: 0.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.02em;
+    }
+    .form-sent-msg {
+      margin-top: 0.75rem; padding: 0.5rem 0.75rem;
+      background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 8px; font-size: 0.78rem; color: var(--emerald);
+      display: flex; align-items: center; gap: 0.4rem;
+      opacity: 0; transform: translateY(6px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .form-sent-msg.show { opacity: 1; transform: translateY(0); }
+    .webhook-trigger {
+      margin-top: 0.75rem; padding: 0.5rem 0.75rem;
+      background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 8px; font-size: 0.72rem; color: var(--indigo);
+      font-family: 'JetBrains Mono', monospace;
+      opacity: 0; transform: translateY(6px);
+      transition: opacity 0.5s 0.4s, transform 0.5s 0.4s;
+    }
+    .webhook-trigger.show { opacity: 1; transform: translateY(0); }
+
+    /* Panel 2: n8n flow visual */
+    .flow-visual { padding: 1.5rem; }
+    .flow-row {
+      display: flex; align-items: center; gap: 0; margin-bottom: 0;
+    }
+    .flow-node-box {
+      flex: 1;
+      padding: 0.75rem 0.6rem;
+      border: 1.5px solid var(--card-border);
+      border-radius: 10px;
+      background: var(--card-bg);
+      text-align: center;
+      transition: border-color 0.4s, box-shadow 0.4s;
+      position: relative;
+    }
+    .flow-node-box.lit {
+      border-color: var(--indigo);
+      box-shadow: 0 0 16px rgba(99,102,241,0.25);
+    }
+    .flow-node-box.lit-cyan { border-color: var(--cyan); box-shadow: 0 0 16px rgba(6,182,212,0.25); }
+    .flow-node-box.lit-emerald { border-color: var(--emerald); box-shadow: 0 0 16px rgba(16,185,129,0.25); }
+    .flow-node-box.lit-amber { border-color: var(--amber); box-shadow: 0 0 16px rgba(245,158,11,0.25); }
+
+    .flow-node-icon { font-size: 1.2rem; margin-bottom: 0.3rem; }
+    .flow-node-name { font-size: 0.65rem; font-weight: 700; color: var(--white); letter-spacing: 0.04em; }
+    .flow-node-type { font-size: 0.6rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .flow-connector {
+      width: 32px; flex-shrink: 0;
+      height: 2px;
+      background: var(--card-border);
+      position: relative;
+      overflow: hidden;
+    }
+    .flow-connector::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, var(--indigo), var(--cyan));
+      transition: left 0.5s ease;
+    }
+    .flow-connector.flow { }
+    .flow-connector.flowing::after { left: 100%; }
+
+    .flow-log {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      line-height: 1.8;
+    }
+    .log-line { color: var(--muted); }
+    .log-line .log-time { color: rgba(99,102,241,0.7); }
+    .log-line .log-ok { color: var(--emerald); }
+    .log-line .log-info { color: var(--cyan); }
+
+    /* Panel 3: AI terminal */
+    .terminal-body {
+      padding: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      line-height: 1.9;
+    }
+    .t-prompt { color: var(--emerald); }
+    .t-text { color: rgba(255,255,255,0.8); }
+    .t-comment { color: rgba(255,255,255,0.3); }
+    .t-key { color: var(--cyan); }
+    .t-val { color: var(--amber); }
+    .t-response { color: var(--emerald); }
+    .t-cursor {
+      display: inline-block; width: 7px; height: 1em;
+      background: var(--white); vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+    /* Panel 4: Outputs */
+    .outputs-list { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem; }
+    .output-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--card-border);
+      border-radius: 10px; background: var(--card-bg);
+      opacity: 0; transform: translateX(20px);
+      transition: opacity 0.4s, transform 0.4s, border-color 0.3s;
+    }
+    .output-item.show { opacity: 1; transform: translateX(0); }
+    .output-item:hover { border-color: rgba(255,255,255,0.12); }
+    .output-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; flex-shrink: 0;
+    }
+    .output-info { flex: 1; min-width: 0; }
+    .output-title { font-size: 0.78rem; font-weight: 600; color: var(--white); }
+    .output-sub { font-size: 0.68rem; color: var(--muted); margin-top: 1px; }
+    .output-time { font-size: 0.65rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+
+    /* ── SHOWCASE ── */
+    #showcase { background: var(--bg2); border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
+
+    /* "Uma segunda-feira com tudo rodando" — narrativa vinda da versão c1 */
+    .dia-strip {
+      margin-top: 3rem; padding: 2rem 2.5rem;
+      border: 1px solid rgba(16,185,129,0.25); border-radius: 16px;
+      background: linear-gradient(135deg, rgba(16,185,129,0.06), rgba(6,182,212,0.03));
+    }
+    .dia-header {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--emerald); margin-bottom: 1.25rem;
+    }
+    .dia-header::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--emerald); box-shadow: 0 0 8px var(--emerald);
+    }
+    .dia-strip p { font-size: 1.05rem; color: var(--muted); line-height: 2; }
+    .dia-strip p em { font-style: normal; color: var(--white); font-weight: 600; }
+    .dia-voce { margin-top: 0.75rem; padding-top: 0.9rem; border-top: 1px solid rgba(255,255,255,0.07); }
+    .dia-voce strong { color: var(--emerald); font-weight: 700; }
+
+    .showcase-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: start; margin-top: 3rem;
+    }
+    .compare-card {
+      border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 2rem;
+      background: var(--card-bg);
+    }
+    .compare-card.after { border-color: rgba(16,185,129,0.25); background: rgba(16,185,129,0.03); }
+    .compare-card h4 {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem;
+    }
+    .compare-card.after h4 { color: var(--emerald); }
+    .compare-item {
+      display: flex; align-items: flex-start; gap: 0.65rem;
+      margin-bottom: 0.8rem; font-size: 0.85rem; color: var(--muted); line-height: 1.5;
+    }
+    .compare-item.good { color: var(--white); }
+    .compare-time {
+      margin-top: 1.25rem; padding-top: 1.25rem;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.85rem; color: var(--muted);
+    }
+    .compare-time strong { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; }
+    .compare-card.after .compare-time strong { color: var(--emerald); }
+    .compare-card:not(.after) .compare-time strong { color: #ef4444; }
+
+    /* ── CASOS ── */
+    .caso-featured {
+      margin-top: 3rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: center;
+      border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 3rem;
+      background: var(--card-bg); position: relative; overflow: hidden;
+    }
+    .caso-featured::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--indigo), var(--cyan), var(--emerald), #a78bfa, var(--indigo));
+      background-size: 300% 100%;
+      animation: border-flow 4s linear infinite;
+    }
+    @keyframes border-flow {
+      0%   { background-position: 0% 0%; }
+      100% { background-position: 300% 0%; }
+    }
+    .caso-tag {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--indigo); margin-bottom: 1rem;
+    }
+    .caso-featured h3 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .caso-featured p { font-size: 0.9rem; color: var(--muted); line-height: 1.75; }
+    .caso-metrics {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.25rem; margin-top: 2rem;
+    }
+    .caso-metric-item {
+      padding: 1.25rem;
+      border: 1px solid var(--card-border);
+      border-radius: 12px; background: rgba(255,255,255,0.03);
+    }
+    .caso-metric-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--indigo), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1; margin-bottom: 0.3rem;
+    }
+    .caso-metric-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
+    /* Flow diagram for caso */
+    .caso-flow {
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .caso-step {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.9rem 1.1rem;
+      border: 1px solid var(--card-border);
+      border-radius: 12px; background: rgba(255,255,255,0.02);
+    }
+    .caso-step-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; flex-shrink: 0;
+    }
+    .caso-step-text { font-size: 0.82rem; color: var(--white); line-height: 1.4; }
+    .caso-step-sub { font-size: 0.72rem; color: var(--muted); }
+    .caso-connector {
+      width: 2px; height: 16px; background: var(--card-border);
+      margin-left: calc(1.1rem + 18px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 5rem 2rem; text-align: center;
+    }
+    .footer-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.2rem; font-weight: 700; letter-spacing: -0.025em;
+      background: linear-gradient(90deg, var(--indigo), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 0.4rem;
+    }
+    .footer-title { font-size: 0.88rem; color: var(--muted); margin-bottom: 2.5rem; }
+    .footer-links { display: flex; gap: 1rem; justify-content: center; list-style: none; }
+    .footer-links a {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.55rem 1.1rem; border: 1px solid var(--card-border);
+      border-radius: 8px; font-size: 0.82rem; color: var(--muted);
+      text-decoration: none; transition: border-color 0.2s, color 0.2s;
+    }
+    .footer-links a:hover { border-color: rgba(99,102,241,0.45); color: var(--white); }
+
+    /* ── REVEAL ──
+       Os estados "escondido" só valem quando o JS confirmou que rodou (html.js).
+       Se um CDN falhar ou o JS estiver desativado, tudo fica visível. */
+    html.js .reveal { opacity: 0; transform: translateY(44px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+    html.js .reveal.revealed { opacity: 1; transform: translateY(0); }
+
+    /* ── SERVIÇOS ── */
+    #servicos { background: var(--bg); }
+    .servicos-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .servico-card {
+      padding: 2rem; border: 1px solid var(--card-border);
+      border-radius: 16px; background: var(--card-bg);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .servico-card:hover { border-color: rgba(99,102,241,0.35); box-shadow: 0 24px 60px rgba(99,102,241,0.14); }
+    .servico-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; margin-bottom: 1.25rem;
+    }
+    .servico-card h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.6rem; }
+    .servico-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+    .servico-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.1rem; }
+    .servico-tag {
+      padding: 0.2rem 0.6rem; border: 1px solid var(--card-border); border-radius: 4px;
+      font-size: 0.65rem; font-weight: 600; color: var(--muted); font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── DEPOIMENTO ── */
+    .testimonial-block {
+      margin-top: 2.5rem; padding: 2.5rem 3rem;
+      border: 1px solid rgba(99,102,241,0.2); border-radius: 16px;
+      background: rgba(99,102,241,0.04); position: relative;
+    }
+    .testimonial-block::before {
+      content: '"'; position: absolute; top: 0.5rem; left: 2rem;
+      font-size: 6rem; line-height: 1; color: rgba(99,102,241,0.12);
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+    }
+    .testimonial-text {
+      font-size: 1.05rem; color: var(--white); line-height: 1.75;
+      font-style: italic; margin-bottom: 1.25rem; position: relative; z-index: 1;
+    }
+    .testimonial-author { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+    .testimonial-author span { color: var(--indigo); }
+
+    /* ── MAIS CASOS ── */
+    .mais-casos-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--cyan); margin-top: 4rem; margin-bottom: 1rem;
+    }
+    .mais-casos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 1rem; }
+    .caso-card-sm {
+      padding: 1.75rem; border: 1px solid var(--card-border);
+      border-radius: 16px; background: var(--card-bg); transition: border-color 0.3s;
+    }
+    .caso-card-sm:hover { border-color: rgba(99,102,241,0.25); }
+    .caso-card-sm-tag {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--cyan); margin-bottom: 0.75rem;
+    }
+    .caso-card-sm h4 { font-size: 0.98rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.6rem; line-height: 1.3; }
+    .caso-card-sm p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+    .caso-card-sm-metrics {
+      display: flex; gap: 1.5rem; margin-top: 1.25rem;
+      padding-top: 1.25rem; border-top: 1px solid var(--card-border);
+    }
+    .caso-card-metric-num {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem;
+      font-weight: 700; line-height: 1; color: var(--indigo); margin-bottom: 0.2rem;
+    }
+    .caso-card-metric-label { font-size: 0.68rem; color: var(--muted); }
+
+    /* ── FOOTER CTA ── */
+    .footer-cta {
+      font-size: 1rem; color: var(--muted); max-width: 400px;
+      margin: 0 auto 2.5rem; line-height: 1.75;
+    }
+    .footer-cta strong { color: var(--white); }
+
+    /* ── HERO SPOTLIGHT ── */
+    #hero-glow {
+      position: absolute;
+      width: 750px; height: 750px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(circle, rgba(99,102,241,0.11) 0%, rgba(6,182,212,0.04) 40%, transparent 65%);
+      transform: translate(-50%, -50%);
+      filter: blur(55px);
+      left: 50%; top: 50%;
+      transition: left 0.18s cubic-bezier(0.23,1,0.32,1), top 0.18s cubic-bezier(0.23,1,0.32,1);
+    }
+
+    /* ── MARQUEE TICKER ── */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.85rem 0;
+      background: rgba(255,255,255,0.013);
+      position: relative; z-index: 1;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+    .marquee-inner {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll 42s linear infinite;
+    }
+    .marquee-inner:hover { animation-play-state: paused; }
+    .marquee-set {
+      display: flex; align-items: center;
+      white-space: nowrap; flex-shrink: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.07em;
+    }
+    .marquee-set span {
+      color: var(--muted);
+      padding: 0 1.4rem;
+      display: inline-flex; align-items: center;
+    }
+    .marquee-set span::after {
+      content: '·';
+      color: rgba(99,102,241,0.45);
+      margin-left: 1.4rem;
+    }
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      z-index: 1000; pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    /* ── CARD TILT base ── */
+    .servico-card, .caso-card-sm, .compare-card {
+      will-change: transform;
+    }
+
+    /* ── AURORA (hero) ── */
+    .aurora-wrap {
+      position: absolute; inset: 0;
+      z-index: 0; pointer-events: none; overflow: hidden;
+    }
+    .aurora-orb {
+      position: absolute; border-radius: 50%; filter: blur(90px);
+    }
+    .aurora-orb.a1 {
+      width: 80vmin; height: 80vmin;
+      background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+      top: -25vmin; left: -20vmin;
+      animation: orb1 26s ease-in-out infinite alternate;
+    }
+    .aurora-orb.a2 {
+      width: 65vmin; height: 65vmin;
+      background: radial-gradient(circle, rgba(6,182,212,0.13) 0%, transparent 70%);
+      bottom: -18vmin; right: -18vmin;
+      animation: orb2 32s ease-in-out infinite alternate;
+    }
+    .aurora-orb.a3 {
+      width: 55vmin; height: 55vmin;
+      background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%);
+      top: 25%; right: 8%;
+      animation: orb3 22s ease-in-out infinite alternate;
+    }
+    @keyframes orb1 {
+      0%   { transform: translate(0,0) scale(1); }
+      40%  { transform: translate(5vmin,-4vmin) scale(1.18); }
+      100% { transform: translate(-3vmin,5vmin) scale(0.88); }
+    }
+    @keyframes orb2 {
+      0%   { transform: translate(0,0) scale(1); }
+      50%  { transform: translate(-4vmin,-3vmin) scale(1.12); }
+      100% { transform: translate(5vmin,4vmin) scale(0.92); }
+    }
+    @keyframes orb3 {
+      0%   { transform: translate(0,0) scale(1); }
+      60%  { transform: translate(-3vmin,4vmin) scale(1.08); }
+      100% { transform: translate(4vmin,-3vmin) scale(0.9); }
+    }
+
+    /* ── SCROLL PROGRESS ── */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--indigo), var(--cyan), var(--emerald));
+      z-index: 9999; pointer-events: none;
+    }
+
+    /* ── SECTION NAV DOTS ── */
+    .section-nav {
+      position: fixed; right: 1.5rem; top: 50%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 0.65rem;
+      z-index: 100;
+    }
+    .section-nav-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transition: background 0.35s, transform 0.35s, box-shadow 0.35s;
+    }
+    .section-nav-dot:hover { background: rgba(255,255,255,0.45); transform: scale(1.5); }
+    .section-nav-dot.active {
+      background: var(--indigo); transform: scale(1.7);
+      box-shadow: 0 0 10px rgba(99,102,241,0.75);
+    }
+
+    /* ── GRID BG ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    /* ── STATS BAND ── */
+    #stats-band {
+      background: var(--bg2);
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0;
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+    }
+    .stat-item {
+      padding: 4rem 2rem; text-align: center;
+      border-right: 1px solid var(--card-border);
+      position: relative; overflow: hidden;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-item::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 100%, rgba(99,102,241,0.05) 0%, transparent 70%);
+      opacity: 0; transition: opacity 0.5s;
+    }
+    .stat-item:hover::before { opacity: 1; }
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 700; letter-spacing: -0.05em; line-height: 1;
+      background: linear-gradient(135deg, var(--white) 0%, rgba(99,102,241,0.8) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 0.4rem; display: block;
+    }
+    .stat-suffix { font-size: 0.55em; opacity: 0.65; }
+    .stat-unit {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--indigo); margin-bottom: 0.5rem;
+    }
+    .stat-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; max-width: 140px; margin: 0 auto; }
+
+    /* ── PARALLAX CONTAINER ── */
+    .parallax-layer { will-change: transform; }
+
+    /* ── TITLE REVEAL (override reveal defaults for h2) ── */
+    html.js h2.section-title { opacity: 0; transform: translateY(70px) scale(0.97); }
+    html.js h2.section-title.revealed { opacity: 1; transform: translateY(0) scale(1); transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1); }
+    html.js .section-label { opacity: 0; transform: translateX(-20px); }
+    html.js .section-label.revealed { opacity: 1; transform: translateX(0); transition: opacity 0.7s ease, transform 0.7s ease; }
+
+    /* ── ACESSIBILIDADE: movimento reduzido ──
+       Quem pediu menos animação no sistema vê tudo parado e visível. */
+    @media (prefers-reduced-motion: reduce) {
+      html.js .reveal, html.js h2.section-title, html.js .section-label { opacity: 1; transform: none; transition: none; }
+      .aurora-orb, .float-card, .scroll-line, .dot { animation: none !important; }
+    }
+
+    /* ── MAGNETIC BUTTON ── */
+    .footer-links a { position: relative; display: inline-flex; }
+
+    /* ── FOOTER NAME GLOW ── */
+    @keyframes name-glow {
+      0%,100% { filter: drop-shadow(0 0 0px transparent); }
+      50%      { filter: drop-shadow(0 0 28px rgba(99,102,241,0.45)); }
+    }
+    .footer-name { animation: name-glow 6s ease-in-out infinite; }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .problema-grid, .showcase-grid, .caso-featured, .h-panel-inner, .servicos-grid, .mais-casos-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      section { padding: 5rem 1.25rem; }
+      .float-card.c2, .float-card.c4 { display: none; }
+      .float-card.c1 { left: 4%; top: 18%; }
+      .float-card.c3 { left: 4%; }
+      .h-section-label { display: none; }
+
+      /* Scroll horizontal vira empilhamento vertical no mobile
+         (o pin do GSAP também é desligado no JS via matchMedia) */
+      #h-section { height: auto; overflow: visible; }
+      .h-track { flex-direction: column; height: auto; transform: none !important; }
+      .h-panel { width: 100%; height: auto; min-height: 0; padding: 4rem 1.25rem; }
+      .h-progress { display: none; }
+      .testimonial-block { padding: 2rem 1.5rem; }
+      .section-nav { display: none; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item { border-bottom: 1px solid var(--card-border); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- SECTION NAV DOTS -->
+<div class="section-nav" id="section-nav" aria-hidden="true">
+  <div class="section-nav-dot active" data-target="hero"></div>
+  <div class="section-nav-dot" data-target="problema"></div>
+  <div class="section-nav-dot" data-target="h-section"></div>
+  <div class="section-nav-dot" data-target="stats-band"></div>
+  <div class="section-nav-dot" data-target="servicos"></div>
+  <div class="section-nav-dot" data-target="showcase"></div>
+  <div class="section-nav-dot" data-target="casos"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">Caio.</span>
+  <ul class="nav-links">
+    <li><a href="#problema">Contexto</a></li>
+    <li><a href="#h-section">Como funciona</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#showcase">Showcase</a></li>
+    <li><a href="#casos">Casos</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div id="hero-glow"></div>
+
+  <!-- Aurora depth layers -->
+  <div class="aurora-wrap parallax-layer" id="aurora-wrap">
+    <div class="aurora-orb a1"></div>
+    <div class="aurora-orb a2"></div>
+    <div class="aurora-orb a3"></div>
+  </div>
+
+  <!-- Floating notification cards -->
+  <div class="float-card c1">
+    <div class="dot"></div>
+    <span class="float-label">Workflow ativo —&nbsp;</span>
+    <span class="float-value">onboarding.n8n</span>
+  </div>
+  <div class="float-card c2">
+    <div class="dot"></div>
+    <span class="float-label">Claude analisou&nbsp;</span>
+    <span class="float-value">14 documentos</span>
+  </div>
+  <div class="float-card c3">
+    <div class="dot"></div>
+    <span class="float-label">CRM atualizado —&nbsp;</span>
+    <span class="float-value">Twenty.com</span>
+  </div>
+  <div class="float-card c4">
+    <div class="dot"></div>
+    <span class="float-label">Economizadas&nbsp;</span>
+    <span class="float-value">8h esta semana</span>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">AI &amp; Automation — Funciona enquanto você dorme</div>
+    <h1 class="hero-title">
+      Seu negócio não precisa<br>
+      de mais horas.<br>
+      <span class="gradient-text">Precisa de sistemas melhores.</span>
+    </h1>
+    <p class="hero-sub">
+      Construo automações com n8n e IA que conectam seus softwares, eliminam trabalho manual e fazem seu time focar no que nenhuma máquina consegue fazer.
+    </p>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- O PROBLEMA -->
+<section id="problema">
+  <div class="container">
+    <div class="section-label">O Contexto</div>
+    <h2 class="section-title">Você tem software.<br>Mas ainda faz tudo na mão.</h2>
+
+    <div class="problema-grid">
+      <div class="problema-left reveal">
+        <p>
+          Toda vez que um cliente preenche um formulário e alguém precisa <strong>manualmente copiar os dados pro CRM</strong>, enviar um email de confirmação, criar uma pasta e cobrar os documentos que faltam — você está pagando alguém para ser um robô humano.
+        </p>
+        <div class="highlight-block">
+          "Quantas vezes por dia você copia um dado de um sistema e cola em outro?"
+        </div>
+        <p>
+          Não é falta de software. É falta de <strong>conexão entre eles</strong>. E essa lacuna custa caro — em tempo, em erro, em velocidade de resposta.
+        </p>
+        <p style="margin-top:1.25rem; color: var(--white); font-size: 0.95rem;">
+          Eu fecho essa lacuna.
+        </p>
+      </div>
+
+      <!-- Inbox chaos visual -->
+      <div class="inbox-visual reveal" id="inbox-visual">
+        <div class="inbox-bar">
+          <div class="inbox-dot r"></div>
+          <div class="inbox-dot y"></div>
+          <div class="inbox-dot g"></div>
+          <div class="inbox-title">Caixa de entrada — 47 não lidas</div>
+        </div>
+        <div class="inbox-list">
+          <div class="inbox-item inbox-unread">
+            <div class="unread-dot"></div>
+            <div class="inbox-avatar" style="background:rgba(239,68,68,0.15);color:#ef4444;">AM</div>
+            <div class="inbox-body">
+              <div class="inbox-from">Ana Martinez</div>
+              <div class="inbox-subject">Pode me confirmar quais docs faltam?</div>
+            </div>
+            <div class="inbox-time">09:47</div>
+          </div>
+          <div class="inbox-item inbox-unread">
+            <div class="unread-dot"></div>
+            <div class="inbox-avatar" style="background:rgba(245,158,11,0.15);color:#f59e0b;">RS</div>
+            <div class="inbox-body">
+              <div class="inbox-from">Rafael Silva</div>
+              <div class="inbox-subject">Meu caso foi cadastrado no sistema?</div>
+            </div>
+            <div class="inbox-time">10:02</div>
+          </div>
+          <div class="inbox-item inbox-unread">
+            <div class="unread-dot"></div>
+            <div class="inbox-avatar" style="background:rgba(99,102,241,0.15);color:#818cf8;">LK</div>
+            <div class="inbox-body">
+              <div class="inbox-from">Larissa Kim</div>
+              <div class="inbox-subject">Re: preciso dos próximos passos urgente</div>
+            </div>
+            <div class="inbox-time">10:31</div>
+          </div>
+          <div class="inbox-item">
+            <div style="width:6px"></div>
+            <div class="inbox-avatar" style="background:rgba(16,185,129,0.15);color:#10b981;">JP</div>
+            <div class="inbox-body">
+              <div class="inbox-from" style="color:var(--muted)">João Pedro</div>
+              <div class="inbox-subject">Fwd: formulário preenchido — aguardando...</div>
+            </div>
+            <div class="inbox-time">11:15</div>
+          </div>
+          <div class="inbox-item">
+            <div style="width:6px"></div>
+            <div class="inbox-avatar" style="background:rgba(6,182,212,0.15);color:#06b6d4;">TC</div>
+            <div class="inbox-body">
+              <div class="inbox-from" style="color:var(--muted)">Tiago Carvalho</div>
+              <div class="inbox-subject">Não recebi nenhum email de confirmação</div>
+            </div>
+            <div class="inbox-time">13:08</div>
+          </div>
+        </div>
+        <div class="inbox-counter">+<span>42</span> emails esperando resposta manual</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HORIZONTAL SCROLL: COMO FUNCIONA -->
+<section id="h-section" style="padding:0;">
+  <span class="h-section-label">Como funciona — scroll para avançar</span>
+  <div class="h-track" id="h-track">
+
+    <!-- Panel 1: Trigger / Form -->
+    <div class="h-panel" style="background: var(--bg);">
+      <div class="h-panel-inner">
+        <div class="h-panel-text">
+          <div class="h-step-num">01 / 04 — Gatilho</div>
+          <h2>Tudo começa<br>com um evento.</h2>
+          <p>Formulário enviado. Email recebido. Botão clicado. Agendamento feito. Qualquer ação do mundo real pode disparar uma automação. Você define o gatilho — o sistema faz o resto.</p>
+          <div class="h-tech-tags">
+            <span class="h-tag active">Typeform</span>
+            <span class="h-tag active">Webhooks</span>
+            <span class="h-tag">Google Forms</span>
+            <span class="h-tag">Calendly</span>
+            <span class="h-tag">Email</span>
+          </div>
+        </div>
+        <div class="visual-box" id="panel1-visual">
+          <div class="visual-titlebar">
+            <div class="vdot r"></div><div class="vdot y"></div><div class="vdot g"></div>
+            <div class="vtitle">intake-form — novo envio</div>
+          </div>
+          <div class="visual-body">
+            <div class="form-field">
+              <div class="form-field-label">Nome completo</div>
+              <div class="form-field-input">Ana Rodrigues</div>
+            </div>
+            <div class="form-field">
+              <div class="form-field-label">Email</div>
+              <div class="form-field-input">ana.r@email.com</div>
+            </div>
+            <div class="form-field">
+              <div class="form-field-label">Tipo de processo</div>
+              <div class="form-field-input">Express Entry — FSW</div>
+            </div>
+            <div class="form-field">
+              <div class="form-field-label">Atualmente no Canadá?</div>
+              <div class="form-field-input">Não — processo Outland</div>
+            </div>
+            <button class="form-submit-btn" onclick="triggerForm(this)">Enviar formulário</button>
+            <div class="form-sent-msg" id="form-sent-msg">✓ Enviado — webhook disparado para n8n</div>
+            <div class="webhook-trigger" id="webhook-trigger">POST /webhook/intake → 200 OK · 84ms</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: n8n orchestration -->
+    <div class="h-panel" style="background: var(--bg2);">
+      <div class="h-panel-inner">
+        <div class="h-panel-text">
+          <div class="h-step-num">02 / 04 — Orquestração</div>
+          <h2>n8n decide<br>o que acontece.</h2>
+          <p>Os dados chegam no n8n em milissegundos. O workflow lê, valida, toma decisões por lógica condicional e distribui para os sistemas certos — sem você tocar em nada.</p>
+          <div class="h-tech-tags">
+            <span class="h-tag active">n8n</span>
+            <span class="h-tag">Supabase</span>
+            <span class="h-tag">REST API</span>
+            <span class="h-tag">Lógica condicional</span>
+            <span class="h-tag active">Webhooks</span>
+          </div>
+        </div>
+        <div class="visual-box" id="panel2-visual">
+          <div class="visual-titlebar">
+            <div class="vdot r"></div><div class="vdot y"></div><div class="vdot g"></div>
+            <div class="vtitle">n8n — workflow ativo</div>
+          </div>
+          <div class="flow-visual">
+            <div class="flow-row">
+              <div class="flow-node-box" id="fn1">
+                <div class="flow-node-icon">🔗</div>
+                <div class="flow-node-name">Webhook</div>
+                <div class="flow-node-type">Trigger</div>
+              </div>
+              <div class="flow-connector" id="fc1"></div>
+              <div class="flow-node-box" id="fn2">
+                <div class="flow-node-icon">🔀</div>
+                <div class="flow-node-name">IF Node</div>
+                <div class="flow-node-type">Condition</div>
+              </div>
+              <div class="flow-connector" id="fc2"></div>
+              <div class="flow-node-box" id="fn3">
+                <div class="flow-node-icon">🧠</div>
+                <div class="flow-node-name">Claude AI</div>
+                <div class="flow-node-type">HTTP Request</div>
+              </div>
+              <div class="flow-connector" id="fc3"></div>
+              <div class="flow-node-box" id="fn4">
+                <div class="flow-node-icon">💼</div>
+                <div class="flow-node-name">Twenty CRM</div>
+                <div class="flow-node-type">REST API</div>
+              </div>
+            </div>
+            <div class="flow-log">
+              <div class="log-line"><span class="log-time">[09:47:03]</span> <span class="log-ok">✓</span> Webhook recebido — 1 item</div>
+              <div class="log-line"><span class="log-time">[09:47:03]</span> <span class="log-info">→</span> IF: is_canada=false → rota Outland</div>
+              <div class="log-line"><span class="log-time">[09:47:04]</span> <span class="log-info">→</span> Claude API: analisando perfil...</div>
+              <div class="log-line"><span class="log-time">[09:47:05]</span> <span class="log-ok">✓</span> Pessoa criada no Twenty CRM</div>
+              <div class="log-line"><span class="log-time">[09:47:05]</span> <span class="log-ok">✓</span> Execução concluída em 2.1s</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 3: AI -->
+    <div class="h-panel" style="background: var(--bg);">
+      <div class="h-panel-inner">
+        <div class="h-panel-text">
+          <div class="h-step-num">03 / 04 — Inteligência</div>
+          <h2>IA adiciona<br>raciocínio real.</h2>
+          <p>Não é só if/else. Claude lê os dados do cliente, entende o contexto, categoriza o caso e gera uma lista de documentos específica para aquele perfil. Sem regras rígidas para cada cenário.</p>
+          <div class="h-tech-tags">
+            <span class="h-tag active">Claude Sonnet</span>
+            <span class="h-tag">GPT-4o</span>
+            <span class="h-tag active">Prompt Engineering</span>
+            <span class="h-tag">Embeddings</span>
+          </div>
+        </div>
+        <div class="visual-box" id="panel3-visual">
+          <div class="visual-titlebar">
+            <div class="vdot r"></div><div class="vdot y"></div><div class="vdot g"></div>
+            <div class="vtitle">claude-sonnet-4-5 — análise em progresso</div>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-comment">// Dados do cliente recebidos via n8n</span></div>
+            <div><span class="t-key">input</span> <span class="t-text">= {</span></div>
+            <div>&nbsp;&nbsp;<span class="t-key">"name"</span><span class="t-text">:&nbsp;</span><span class="t-val">"Ana Rodrigues"</span><span class="t-text">,</span></div>
+            <div>&nbsp;&nbsp;<span class="t-key">"process"</span><span class="t-text">:&nbsp;</span><span class="t-val">"Express Entry FSW"</span><span class="t-text">,</span></div>
+            <div>&nbsp;&nbsp;<span class="t-key">"location"</span><span class="t-text">:&nbsp;</span><span class="t-val">"Outland"</span></div>
+            <div><span class="t-text">}</span></div>
+            <div style="margin-top:0.5rem"><span class="t-comment">// Claude analisando perfil...</span></div>
+            <div style="margin-top:0.3rem"><span class="t-response">→ Documentos necessários: 8 itens</span></div>
+            <div><span class="t-response">→ Prioridade: Passaporte + IELTS</span></div>
+            <div><span class="t-response">→ Categoria: FSW Outland Standard</span></div>
+            <div><span class="t-response">→ Email personalizado: gerado ✓</span></div>
+            <div style="margin-top:0.3rem"><span class="t-prompt">$</span> <span class="t-text">upload_to_supabase(docs_list)</span></div>
+            <div><span class="t-response">✓ 8 documentos salvos</span> <span class="t-cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 4: Outputs -->
+    <div class="h-panel" style="background: var(--bg2);">
+      <div class="h-panel-inner">
+        <div class="h-panel-text">
+          <div class="h-step-num">04 / 04 — Resultado</div>
+          <h2>Tudo acontece.<br>Você não faz nada.</h2>
+          <p>CRM atualizado. Documentos organizados. Email enviado ao cliente. Notificação pro time. Tudo em menos de 3 segundos, enquanto você está em outra reunião — ou dormindo.</p>
+          <div class="h-tech-tags">
+            <span class="h-tag active">Twenty CRM</span>
+            <span class="h-tag">Gmail</span>
+            <span class="h-tag active">Supabase</span>
+            <span class="h-tag">Slack</span>
+            <span class="h-tag">WhatsApp</span>
+          </div>
+        </div>
+        <div class="visual-box" id="panel4-visual">
+          <div class="visual-titlebar">
+            <div class="vdot r"></div><div class="vdot y"></div><div class="vdot g"></div>
+            <div class="vtitle">outputs — 2.1s após o envio</div>
+          </div>
+          <div class="outputs-list" id="outputs-list">
+            <div class="output-item" id="out1">
+              <div class="output-icon" style="background:rgba(99,102,241,0.12)">💼</div>
+              <div class="output-info">
+                <div class="output-title">Twenty CRM — Pessoa criada</div>
+                <div class="output-sub">Ana Rodrigues · Express Entry FSW · Outland</div>
+              </div>
+              <div class="output-time">+0.8s</div>
+            </div>
+            <div class="output-item" id="out2">
+              <div class="output-icon" style="background:rgba(6,182,212,0.12)">🗂️</div>
+              <div class="output-info">
+                <div class="output-title">Supabase — 8 documentos salvos</div>
+                <div class="output-sub">Lista personalizada por perfil FSW Outland</div>
+              </div>
+              <div class="output-time">+1.2s</div>
+            </div>
+            <div class="output-item" id="out3">
+              <div class="output-icon" style="background:rgba(16,185,129,0.12)">📧</div>
+              <div class="output-info">
+                <div class="output-title">Gmail — Email enviado ao cliente</div>
+                <div class="output-sub">Lista de documentos + próximos passos</div>
+              </div>
+              <div class="output-time">+1.6s</div>
+            </div>
+            <div class="output-item" id="out4">
+              <div class="output-icon" style="background:rgba(245,158,11,0.12)">💬</div>
+              <div class="output-info">
+                <div class="output-title">Slack — Time notificado</div>
+                <div class="output-sub">Novo cliente Ana R. — aguardando docs</div>
+              </div>
+              <div class="output-time">+2.1s</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end h-track -->
+
+  <!-- Progress dots -->
+  <div class="h-progress" id="h-progress">
+    <div class="h-progress-dot active" data-panel="0"></div>
+    <div class="h-progress-dot" data-panel="1"></div>
+    <div class="h-progress-dot" data-panel="2"></div>
+    <div class="h-progress-dot" data-panel="3"></div>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<section id="stats-band">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <span class="stat-num counter" data-target="8">0</span>
+      <div class="stat-unit">h / semana</div>
+      <div class="stat-desc">recuperadas em tarefas manuais repetitivas</div>
+    </div>
+    <div class="stat-item reveal">
+      <span class="stat-num">98<span class="stat-suffix">%</span></span>
+      <div class="stat-unit">redução</div>
+      <div class="stat-desc">no tempo de resposta inicial ao cliente</div>
+    </div>
+    <div class="stat-item reveal">
+      <span class="stat-num counter" data-target="207">0</span>
+      <div class="stat-unit">registros</div>
+      <div class="stat-desc">migrados sem nenhuma perda de dados</div>
+    </div>
+    <div class="stat-item reveal">
+      <span class="stat-num">&lt;3<span class="stat-suffix">s</span></span>
+      <div class="stat-unit">por cliente</div>
+      <div class="stat-desc">do formulário ao CRM atualizado</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="container">
+    <div class="section-label">O Que Faço</div>
+    <h2 class="section-title">Automatizo o que você<br>faz manualmente hoje.</h2>
+    <p class="section-sub">Cada um desses processos já foi implementado para negócios reais. Não são templates — são sistemas construídos para funcionar.</p>
+    <div class="servicos-grid">
+      <div class="servico-card reveal">
+        <div class="servico-icon" style="background:rgba(99,102,241,0.12)">🔄</div>
+        <h3>Onboarding Automatizado</h3>
+        <p>Formulário → CRM → email personalizado → checklist de documentos. Do zero ao cliente cadastrado em segundos, sem nenhum toque manual.</p>
+        <div class="servico-tags">
+          <span class="servico-tag">Typeform</span>
+          <span class="servico-tag">n8n</span>
+          <span class="servico-tag">Twenty CRM</span>
+          <span class="servico-tag">Gmail</span>
+        </div>
+      </div>
+      <div class="servico-card reveal">
+        <div class="servico-icon" style="background:rgba(16,185,129,0.12)">🧠</div>
+        <h3>Workflows com IA</h3>
+        <p>Claude ou GPT dentro dos seus processos reais. Classificação de casos, extração de dados, geração de textos personalizados — com contexto do negócio, não prompts genéricos.</p>
+        <div class="servico-tags">
+          <span class="servico-tag">Claude API</span>
+          <span class="servico-tag">GPT-4o</span>
+          <span class="servico-tag">Prompt Eng.</span>
+          <span class="servico-tag">n8n</span>
+        </div>
+      </div>
+      <div class="servico-card reveal">
+        <div class="servico-icon" style="background:rgba(6,182,212,0.12)">🔗</div>
+        <h3>Integrações entre Sistemas</h3>
+        <p>Conectar ferramentas que não se falam. CRM, planilhas, formulários, email, WhatsApp, Slack — tudo em sincronia, sem copiar e colar entre sistemas.</p>
+        <div class="servico-tags">
+          <span class="servico-tag">REST API</span>
+          <span class="servico-tag">Webhooks</span>
+          <span class="servico-tag">Supabase</span>
+          <span class="servico-tag">Zapier → n8n</span>
+        </div>
+      </div>
+      <div class="servico-card reveal">
+        <div class="servico-icon" style="background:rgba(245,158,11,0.12)">📝</div>
+        <h3>Pipeline de Conteúdo SEO</h3>
+        <p>Keyword research → geração com IA → revisão humana → publicação. Volume de conteúdo sem perder qualidade ou controle editorial.</p>
+        <div class="servico-tags">
+          <span class="servico-tag">SEO</span>
+          <span class="servico-tag">Claude</span>
+          <span class="servico-tag">WordPress API</span>
+          <span class="servico-tag">n8n</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE TICKER -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <div class="marquee-set">
+      <span>n8n</span><span>Claude API</span><span>Supabase</span><span>Typeform</span><span>Twenty CRM</span><span>REST APIs</span><span>Webhooks</span><span>GPT-4o</span><span>WordPress API</span><span>Calendly</span><span>Make</span><span>Google Workspace</span><span>Slack</span><span>Airtable</span><span>Prompt Engineering</span><span>Automação</span>
+    </div>
+    <div class="marquee-set" aria-hidden="true">
+      <span>n8n</span><span>Claude API</span><span>Supabase</span><span>Typeform</span><span>Twenty CRM</span><span>REST APIs</span><span>Webhooks</span><span>GPT-4o</span><span>WordPress API</span><span>Calendly</span><span>Make</span><span>Google Workspace</span><span>Slack</span><span>Airtable</span><span>Prompt Engineering</span><span>Automação</span>
+    </div>
+  </div>
+</div>
+
+<!-- SHOWCASE: Antes × Depois -->
+<section id="showcase">
+  <div class="container">
+    <div class="section-label">Antes × Depois</div>
+    <h2 class="section-title">O que muda na prática.</h2>
+    <p class="section-sub">Mesmo processo. Mesmos softwares. O que muda é a conexão entre eles.</p>
+
+    <div class="showcase-grid" style="margin-top:3rem;">
+      <div class="compare-card reveal">
+        <h4>Antes — Processo Manual</h4>
+        <div class="compare-item">
+          <span>❌</span>
+          <span>Cliente envia email. Alguém lê, copia nome e contato pro CRM.</span>
+        </div>
+        <div class="compare-item">
+          <span>❌</span>
+          <span>Consultor verifica manualmente quais documentos faltam para aquele perfil.</span>
+        </div>
+        <div class="compare-item">
+          <span>❌</span>
+          <span>Email de confirmação digitado e enviado um a um.</span>
+        </div>
+        <div class="compare-item">
+          <span>❌</span>
+          <span>Pasta criada, caso categorizado, time avisado — tudo separado.</span>
+        </div>
+        <div class="compare-item">
+          <span>❌</span>
+          <span>Se alguém estava ocupado, cliente espera. E reclama.</span>
+        </div>
+        <div class="compare-time">
+          <strong>2–3 horas</strong> de trabalho manual por cliente novo
+        </div>
+      </div>
+
+      <div class="compare-card after reveal">
+        <h4>Depois — Automatizado</h4>
+        <div class="compare-item good">
+          <span>✅</span>
+          <span>Formulário submetido → webhook dispara → dados chegam no n8n.</span>
+        </div>
+        <div class="compare-item good">
+          <span>✅</span>
+          <span>Claude analisa o perfil e gera lista de documentos específica.</span>
+        </div>
+        <div class="compare-item good">
+          <span>✅</span>
+          <span>Email personalizado gerado e enviado automaticamente em segundos.</span>
+        </div>
+        <div class="compare-item good">
+          <span>✅</span>
+          <span>CRM atualizado, documentos salvos no Supabase, time no Slack notificado.</span>
+        </div>
+        <div class="compare-item good">
+          <span>✅</span>
+          <span>Funciona às 2h da manhã, no feriado, sem você tocar em nada.</span>
+        </div>
+        <div class="compare-time">
+          <strong style="color: var(--emerald)">~3 minutos</strong> do envio do formulário até tudo configurado
+        </div>
+      </div>
+    </div>
+
+    <!-- Como isso se traduz numa manhã comum (narrativa da versão c1) -->
+    <div class="dia-strip reveal">
+      <div class="dia-header">Segunda-feira, 09:15 — com tudo isso rodando</div>
+      <p>3 leads qualificados chegaram. <em>Automaticamente.</em></p>
+      <p>Relatório da semana: enviado. <em>Sozinho.</em></p>
+      <p>Onboarding do cliente novo: feito. <em>CRM atualizado, proposta entregue.</em></p>
+      <p class="dia-voce">Você hoje: <strong>estratégia. clientes. vida.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- CASOS -->
+<section id="casos">
+  <div class="container">
+    <div class="section-label">Caso Real</div>
+    <h2 class="section-title">UP Immigration.<br>Canadá.</h2>
+
+    <div class="caso-featured reveal">
+      <div>
+        <div class="caso-tag">Serviços de Imigração · Vancouver, BC</div>
+        <h3>Onboarding de clientes: de 3 horas para 3 minutos.</h3>
+        <p>
+          Escritório de imigração no Canadá. Cada cliente novo exigia um ciclo manual completo: receber dados por email, verificar qual tipo de visto, identificar quais documentos eram necessários para aquele perfil específico, cadastrar no CRM, criar pasta, enviar email de confirmação.
+        </p>
+        <p style="margin-top: 1rem;">
+          Construímos um sistema completo com n8n, Claude e Supabase. Hoje, quando um cliente preenche o intake form, em menos de 3 segundos o CRM está atualizado, os documentos filtrados por IA e o email enviado — automaticamente.
+        </p>
+        <div class="caso-metrics">
+          <div class="caso-metric-item">
+            <div class="caso-metric-num counter" data-target="8">0</div>
+            <div class="caso-metric-desc">horas por semana recuperadas em trabalho de onboarding</div>
+          </div>
+          <div class="caso-metric-item">
+            <div class="caso-metric-num">98%</div>
+            <div class="caso-metric-desc">redução no tempo de resposta inicial ao cliente</div>
+          </div>
+          <div class="caso-metric-item">
+            <div class="caso-metric-num counter" data-target="207">0</div>
+            <div class="caso-metric-desc">notas migradas automaticamente no CRM na fase de transição</div>
+          </div>
+          <div class="caso-metric-item">
+            <div class="caso-metric-num">0</div>
+            <div class="caso-metric-desc">intervenções manuais necessárias no processo de onboarding</div>
+          </div>
+        </div>
+      </div>
+      <div class="caso-flow">
+        <div class="caso-step">
+          <div class="caso-step-icon" style="background:rgba(99,102,241,0.12)">📋</div>
+          <div>
+            <div class="caso-step-text">Cliente preenche o intake form</div>
+            <div class="caso-step-sub">Typeform → webhook dispara</div>
+          </div>
+        </div>
+        <div class="caso-connector"></div>
+        <div class="caso-step">
+          <div class="caso-step-icon" style="background:rgba(6,182,212,0.12)">🔀</div>
+          <div>
+            <div class="caso-step-text">n8n processa e roteio o caso</div>
+            <div class="caso-step-sub">Inland vs Outland · tipo de visto</div>
+          </div>
+        </div>
+        <div class="caso-connector"></div>
+        <div class="caso-step">
+          <div class="caso-step-icon" style="background:rgba(16,185,129,0.12)">🧠</div>
+          <div>
+            <div class="caso-step-text">Claude filtra documentos necessários</div>
+            <div class="caso-step-sub">Lista personalizada por perfil</div>
+          </div>
+        </div>
+        <div class="caso-connector"></div>
+        <div class="caso-step">
+          <div class="caso-step-icon" style="background:rgba(245,158,11,0.12)">💼</div>
+          <div>
+            <div class="caso-step-text">Twenty CRM atualizado via API</div>
+            <div class="caso-step-sub">Pessoa + oportunidade criadas</div>
+          </div>
+        </div>
+        <div class="caso-connector"></div>
+        <div class="caso-step">
+          <div class="caso-step-icon" style="background:rgba(99,102,241,0.12)">📧</div>
+          <div>
+            <div class="caso-step-text">Email enviado automaticamente</div>
+            <div class="caso-step-sub">Com lista de docs + próximos passos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Depoimento -->
+    <div class="testimonial-block reveal">
+      <p class="testimonial-text">
+        "Em menos de 3 semanas tínhamos um sistema que antes teria levado meses. O que mais impressionou foi que o Caio não chegou com uma solução pronta — ele entendeu o processo, identificou onde estava o gargalo e construiu algo que funciona de verdade no dia a dia."
+      </p>
+      <div class="testimonial-author">Proprietário — <span>UP Immigration · Vancouver, BC</span></div>
+    </div>
+
+    <!-- Outros projetos -->
+    <div class="mais-casos-label">Outros Projetos</div>
+    <div class="mais-casos-grid">
+      <div class="caso-card-sm reveal">
+        <div class="caso-card-sm-tag">Blog & SEO · Imigração</div>
+        <h4>Pipeline de conteúdo semi-automático</h4>
+        <p>Sistema que vai de keyword research até publicação no WordPress, com IA gerando rascunhos e revisão humana fazendo o controle editorial final.</p>
+        <div class="caso-card-sm-metrics">
+          <div>
+            <div class="caso-card-metric-num">10×</div>
+            <div class="caso-card-metric-label">artigos/mês</div>
+          </div>
+          <div>
+            <div class="caso-card-metric-num">-60%</div>
+            <div class="caso-card-metric-label">tempo de produção</div>
+          </div>
+        </div>
+      </div>
+      <div class="caso-card-sm reveal">
+        <div class="caso-card-sm-tag">CRM Migration · Operações</div>
+        <h4>Migração de CRM sem perda de histórico</h4>
+        <p>Migração completa de Capsule CRM para Twenty.com: 207 notas, 16 oportunidades e histórico de clientes migrado via scripts customizados.</p>
+        <div class="caso-card-sm-metrics">
+          <div>
+            <div class="caso-card-metric-num">207</div>
+            <div class="caso-card-metric-label">notas migradas</div>
+          </div>
+          <div>
+            <div class="caso-card-metric-num">0</div>
+            <div class="caso-card-metric-label">perdas de dados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Caio.</div>
+  <div class="footer-title">AI & Automation · n8n · Claude · APIs</div>
+  <p class="footer-cta">
+    Tem um processo manual que te incomoda?<br>
+    <strong>Me conta o problema — a solução provavelmente já existe.</strong>
+  </p>
+  <ul class="footer-links">
+    <li><a href="https://www.linkedin.com/in/caiocastelluber/" target="_blank" rel="noopener">💼 LinkedIn</a></li>
+  </ul>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   ORGANIZAÇÃO DESTE SCRIPT
+   1. Fallbacks de segurança — a página nunca fica em branco
+   2. Reveal on scroll (JS puro, sem bibliotecas)
+   3. Smooth scroll (Lenis) e animações (GSAP) — só se os CDNs carregaram
+   4. Three.js hero — idem
+   Interações simples (tilt, spotlight, form) são JS puro e rodam sempre.
+   ══════════════════════════════════════════════════════════════ */
+
+/* A classe "js" libera os estados escondidos no CSS.
+   Se este script não rodar (CDN fora do ar), o conteúdo fica visível. */
+document.documentElement.classList.add('js');
+
+// As bibliotecas carregaram? O usuário pediu menos movimento no sistema?
+const GSAP_OK = !!(window.gsap && window.ScrollTrigger);
+const LENIS_OK = !!window.Lenis;
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Animações de scroll só rodam com GSAP disponível e sem pedido de movimento reduzido
+const ANIMATE = GSAP_OK && !REDUCED;
+if (!GSAP_OK) console.warn('GSAP não carregou — animações de scroll desativadas.');
+if (GSAP_OK) gsap.registerPlugin(ScrollTrigger);
+
+// ── REVEAL ON SCROLL ── (IntersectionObserver puro — não depende de GSAP)
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ── LENIS SMOOTH SCROLL ── (usado também pelos dots de navegação)
+let lenis = null;
+if (LENIS_OK && ANIMATE) {
+  lenis = new Lenis({
+    duration: 1.5,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+  });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+}
+
+// ── THREE.JS HERO ──
+try { (function() {
+  const canvas = document.getElementById('hero-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 100);
+  camera.position.z = 4;
+
+  const geo = new THREE.IcosahedronGeometry(1.7, 1);
+  const mat = new THREE.MeshBasicMaterial({ color: 0x6366f1, wireframe: true, transparent: true, opacity: 0.28 });
+  const mesh = new THREE.Mesh(geo, mat);
+  scene.add(mesh);
+
+  const geo2 = new THREE.IcosahedronGeometry(0.55, 1);
+  const mat2 = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.22 });
+  const mesh2 = new THREE.Mesh(geo2, mat2);
+  mesh2.position.set(2.6, 1.1, -1);
+  scene.add(mesh2);
+
+  const geo3 = new THREE.OctahedronGeometry(0.4, 0);
+  const mat3 = new THREE.MeshBasicMaterial({ color: 0x10b981, wireframe: true, transparent: true, opacity: 0.2 });
+  const mesh3 = new THREE.Mesh(geo3, mat3);
+  mesh3.position.set(-2.8, -1.2, -0.5);
+  scene.add(mesh3);
+
+  const N = 150;
+  const pos = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    pos[i*3] = (Math.random()-.5)*16;
+    pos[i*3+1] = (Math.random()-.5)*12;
+    pos[i*3+2] = (Math.random()-.5)*8;
+  }
+  const pg = new THREE.BufferGeometry();
+  pg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const pm = new THREE.PointsMaterial({ color: 0x6366f1, size: 0.035, transparent: true, opacity: 0.5 });
+  scene.add(new THREE.Points(pg, pm));
+
+  function resize() {
+    renderer.setSize(innerWidth, innerHeight);
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  addEventListener('resize', resize);
+
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = (e.clientX / innerWidth - .5) * 2;
+    my = (e.clientY / innerHeight - .5) * 2;
+  });
+
+  const clk = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clk.getElapsedTime();
+    mesh.rotation.x = t * 0.07 + my * 0.12;
+    mesh.rotation.y = t * 0.11 + mx * 0.12;
+    mesh2.rotation.x = t * 0.13; mesh2.rotation.y = t * 0.09;
+    mesh2.position.x = 2.6 + Math.sin(t * 0.35) * 0.25;
+    mesh2.position.y = 1.1 + Math.cos(t * 0.28) * 0.25;
+    mesh3.rotation.x = t * 0.16; mesh3.rotation.y = t * 0.12;
+    mesh3.position.x = -2.8 + Math.sin(t * 0.2) * 0.2;
+    renderer.render(scene, camera);
+  }
+  // Movimento reduzido: renderiza um único quadro estático em vez do loop
+  if (REDUCED) { renderer.render(scene, camera); } else { animate(); }
+})(); } catch(e) { console.warn('Three.js hero skipped:', e); }
+
+if (ANIMATE) { // ═══ ANIMAÇÕES GSAP — parte 1: hero ═══
+
+// ── PARALLAX: Hero text on scroll ──
+gsap.to('.hero-content', {
+  y: -120, opacity: 0,
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true }
+});
+
+// Floating cards parallax at different rates
+gsap.to('.float-card.c1', { y: -60, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.8 } });
+gsap.to('.float-card.c2', { y: -100, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.2 } });
+gsap.to('.float-card.c3', { y: -40, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.6 } });
+gsap.to('.float-card.c4', { y: -80, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.0 } });
+
+// Hero entrance animation
+gsap.from('.hero-badge', { y: 30, opacity: 0, duration: 0.8, delay: 0.3 });
+gsap.from('.hero-title', { y: 40, opacity: 0, duration: 1, delay: 0.5, ease: 'power3.out' });
+gsap.from('.hero-sub', { y: 30, opacity: 0, duration: 0.9, delay: 0.8 });
+gsap.from('.float-card', { scale: 0.85, opacity: 0, duration: 0.7, stagger: 0.15, delay: 1, ease: 'back.out(1.7)' });
+
+// Subtle float animation on cards
+gsap.to('.float-card.c1', { y: '-=8', repeat: -1, yoyo: true, duration: 2.8, ease: 'sine.inOut', delay: 0 });
+gsap.to('.float-card.c2', { y: '-=12', repeat: -1, yoyo: true, duration: 3.2, ease: 'sine.inOut', delay: 0.5 });
+gsap.to('.float-card.c3', { y: '-=7', repeat: -1, yoyo: true, duration: 2.5, ease: 'sine.inOut', delay: 1 });
+gsap.to('.float-card.c4', { y: '-=10', repeat: -1, yoyo: true, duration: 3.5, ease: 'sine.inOut', delay: 0.8 });
+
+} // ═══ fim GSAP parte 1 ═══
+
+// ── COUNTERS ── (sem GSAP ou com movimento reduzido, mostra o valor final direto)
+document.querySelectorAll('.counter[data-target]').forEach(el => {
+  const target = parseInt(el.dataset.target);
+  if (!ANIMATE) { el.textContent = target; return; }
+  const obj = { val: 0 };
+  ScrollTrigger.create({
+    trigger: el, start: 'top 85%', once: true,
+    onEnter: () => gsap.to(obj, {
+      val: target, duration: 1.8, ease: 'power2.out',
+      onUpdate: () => { el.textContent = Math.round(obj.val); }
+    })
+  });
+});
+
+// ── PARALLAX ON SECTIONS ──
+if (ANIMATE) {
+gsap.to('#problema .container', {
+  y: -30,
+  scrollTrigger: { trigger: '#problema', start: 'top bottom', end: 'bottom top', scrub: true }
+});
+}
+
+// ── HORIZONTAL SCROLL ──
+// Pin + scroll horizontal só no desktop; no mobile (≤900px) o CSS
+// empilha os painéis na vertical e nada aqui roda.
+if (ANIMATE) {
+  const mmHorizontal = gsap.matchMedia();
+  mmHorizontal.add('(min-width: 901px)', () => {
+    const track = document.getElementById('h-track');
+    const panels = gsap.utils.toArray('.h-panel');
+    const progressDots = document.querySelectorAll('.h-progress-dot');
+
+    gsap.to(track, {
+      x: () => -(track.scrollWidth - window.innerWidth),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#h-section',
+        pin: true,
+        scrub: 1,
+        invalidateOnRefresh: true,
+        end: () => '+=' + (track.scrollWidth - window.innerWidth),
+        onUpdate: (self) => {
+          const current = Math.round(self.progress * (panels.length - 1));
+          progressDots.forEach((d, i) => d.classList.toggle('active', i === current));
+
+          // Trigger panel4 outputs when reaching last panel
+          if (current === 3) triggerOutputs();
+          // Trigger n8n flow when reaching panel2
+          if (current === 1) triggerFlow();
+        }
+      }
+    });
+    // o retorno do matchMedia limpa tudo sozinho se a tela mudar de tamanho
+  });
+}
+
+// Fallback universal: dispara as animações dos painéis quando eles
+// entram na tela (mobile empilhado, movimento reduzido ou GSAP ausente).
+// triggerFlow/triggerOutputs têm trava interna, então nunca rodam duas vezes.
+[['fn1', () => triggerFlow()], ['out1', () => triggerOutputs()]].forEach(([id, fire]) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const obs = new IntersectionObserver((entries) => {
+    if (entries.some(e => e.isIntersecting)) { fire(); obs.disconnect(); }
+  }, { threshold: 0.3 });
+  obs.observe(el);
+});
+
+// Panel 1: form interaction
+function triggerForm(btn) {
+  btn.textContent = 'Enviando...';
+  btn.style.opacity = '0.7';
+  setTimeout(() => {
+    document.getElementById('form-sent-msg').classList.add('show');
+    document.getElementById('webhook-trigger').classList.add('show');
+    btn.textContent = '✓ Enviado';
+  }, 600);
+}
+
+// Panel 2: n8n flow animation
+let flowPlayed = false;
+function triggerFlow() {
+  if (flowPlayed) return; flowPlayed = true;
+  const nodes = ['fn1','fn2','fn3','fn4'];
+  const connectors = ['fc1','fc2','fc3'];
+  const classes = ['lit','lit-cyan','lit-amber','lit-emerald'];
+  nodes.forEach((id, i) => {
+    setTimeout(() => {
+      document.getElementById(id).classList.add(classes[i]);
+      if (connectors[i]) document.getElementById(connectors[i]).classList.add('flowing');
+    }, i * 400);
+  });
+}
+
+// Panel 4: outputs animation
+let outputsPlayed = false;
+function triggerOutputs() {
+  if (outputsPlayed) return; outputsPlayed = true;
+  ['out1','out2','out3','out4'].forEach((id, i) => {
+    setTimeout(() => document.getElementById(id).classList.add('show'), i * 350 + 200);
+  });
+}
+
+if (ANIMATE) { // ═══ ANIMAÇÕES GSAP — parte 2: parallax de seções ═══
+
+// ── SECTION TITLE PARALLAX ──
+gsap.utils.toArray('.section-title').forEach(el => {
+  gsap.fromTo(el,
+    { backgroundPositionY: '0%' },
+    { backgroundPositionY: '100%',
+      scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true }
+    }
+  );
+});
+
+// caso-featured right-side parallax
+gsap.to('.caso-flow', {
+  y: -30,
+  scrollTrigger: { trigger: '.caso-featured', start: 'top bottom', end: 'bottom top', scrub: true }
+});
+
+// inbox-visual parallax
+gsap.to('#inbox-visual', {
+  y: -20,
+  scrollTrigger: { trigger: '#problema', start: 'top bottom', end: 'bottom top', scrub: true }
+});
+
+ScrollTrigger.refresh();
+
+} // ═══ fim GSAP parte 2 ═══
+
+// ── SCROLL PROGRESS BAR ──
+(function() {
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+  window.addEventListener('scroll', () => {
+    const t = document.documentElement.scrollHeight - innerHeight;
+    bar.style.width = (t > 0 ? window.scrollY / t * 100 : 0) + '%';
+  }, { passive: true });
+})();
+
+// ── SECTION NAV DOTS ──
+(function() {
+  const dots = document.querySelectorAll('.section-nav-dot');
+  const ids  = ['hero','problema','h-section','stats-band','servicos','showcase','casos'];
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const el = document.getElementById(dot.dataset.target);
+      if (!el) return;
+      // Com Lenis usa o scroll suave dele; sem Lenis, o nativo do navegador
+      if (lenis) lenis.scrollTo(el, { duration: 1.4 });
+      else el.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth' });
+    });
+  });
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = ids.indexOf(e.target.id);
+        if (idx >= 0) dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: 0.4 });
+  ids.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+})();
+
+// ── SECTION TITLES: scale + translate reveal ──
+document.querySelectorAll('h2.section-title, .section-label').forEach(el => {
+  revealObserver.observe(el);
+});
+
+if (ANIMATE) { // ═══ ANIMAÇÕES GSAP — parte 3: aurora e visuais ═══
+
+// ── AURORA PARALLAX (moves slower than scroll) ──
+gsap.to('.aurora-orb.a1', {
+  y: -160, x: 40,
+  ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.5 }
+});
+gsap.to('.aurora-orb.a2', {
+  y: 100, x: -30,
+  ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1 }
+});
+gsap.to('.aurora-orb.a3', {
+  y: -80,
+  ease: 'none',
+  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.2 }
+});
+
+// ── DEEP PARALLAX: inbox & flow visuals ──
+gsap.to('#inbox-visual', {
+  y: -80,
+  ease: 'none',
+  scrollTrigger: { trigger: '#problema', start: 'top bottom', end: 'bottom top', scrub: true }
+});
+gsap.to('.caso-flow', {
+  y: -60,
+  ease: 'none',
+  scrollTrigger: { trigger: '.caso-featured', start: 'top bottom', end: 'bottom top', scrub: true }
+});
+
+// ── SCALE PARALLAX on visuals entering viewport ──
+gsap.utils.toArray('.visual-box, .inbox-visual, .compare-card').forEach(el => {
+  gsap.fromTo(el,
+    { scale: 0.88, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 85%', once: true } }
+  );
+});
+
+} // ═══ fim GSAP parte 3 ═══
+
+// ── MAGNETIC FOOTER BUTTON ──
+document.querySelectorAll('.footer-links a').forEach(btn => {
+  btn.addEventListener('mouseenter', () => {
+    btn.style.transition = 'transform 0.1s ease, border-color 0.2s, color 0.2s';
+  });
+  btn.addEventListener('mousemove', (e) => {
+    const r = btn.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width  / 2) * 0.4;
+    const y = (e.clientY - r.top  - r.height / 2) * 0.4;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transition = 'transform 0.6s cubic-bezier(0.23,1,0.32,1), border-color 0.2s, color 0.2s';
+    btn.style.transform = '';
+  });
+});
+
+// ── HERO MOUSE SPOTLIGHT ──
+(function() {
+  const heroEl = document.getElementById('hero');
+  const glowEl = document.getElementById('hero-glow');
+  if (!heroEl || !glowEl) return;
+  heroEl.addEventListener('mousemove', (e) => {
+    const r = heroEl.getBoundingClientRect();
+    glowEl.style.left = (e.clientX - r.left) + 'px';
+    glowEl.style.top  = (e.clientY - r.top)  + 'px';
+  });
+  heroEl.addEventListener('mouseleave', () => {
+    glowEl.style.left = '50%';
+    glowEl.style.top  = '50%';
+  });
+})();
+
+// ── 3D CARD TILT ──
+document.querySelectorAll('.servico-card, .caso-card-sm, .compare-card, .caso-metric-item').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'transform 0.12s ease, border-color 0.3s, box-shadow 0.3s';
+  });
+  card.addEventListener('mousemove', (e) => {
+    const r  = card.getBoundingClientRect();
+    const x  = e.clientX - r.left;
+    const y  = e.clientY - r.top;
+    const cx = r.width  / 2;
+    const cy = r.height / 2;
+    const rotX = ((y - cy) / cy) * -7;
+    const rotY = ((x - cx) / cx) *  7;
+    card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(10px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transition = 'transform 0.65s cubic-bezier(0.23,1,0.32,1), border-color 0.3s, box-shadow 0.3s';
+    card.style.transform = '';
+  });
+});
+</script>
+</body>
+</html>
