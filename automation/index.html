@@ -930,7 +930,7 @@
       .nav-links { display: none; }
       .problema-grid, .showcase-grid, .caso-featured, .h-panel-inner, .servicos-grid, .mais-casos-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       section { padding: 5rem 1.25rem; }
-      .float-card.c2, .float-card.c4 { display: none; }
+      .float-card.c2 { display: none; }
       .float-card.c1 { left: 4%; top: 18%; }
       .float-card.c3 { left: 4%; }
       .h-section-label { display: none; }
@@ -992,23 +992,15 @@
   <!-- Floating notification cards -->
   <div class="float-card c1">
     <div class="dot"></div>
-    <span class="float-label">Workflow ativo —&nbsp;</span>
-    <span class="float-value">onboarding.n8n</span>
+    <span class="float-value">CRM Atualizado</span>
   </div>
   <div class="float-card c2">
     <div class="dot"></div>
-    <span class="float-label">Claude analisou&nbsp;</span>
-    <span class="float-value">14 documentos</span>
+    <span class="float-value">Leads Qualificados</span>
   </div>
   <div class="float-card c3">
     <div class="dot"></div>
-    <span class="float-label">CRM atualizado —&nbsp;</span>
-    <span class="float-value">Twenty.com</span>
-  </div>
-  <div class="float-card c4">
-    <div class="dot"></div>
-    <span class="float-label">Economizadas&nbsp;</span>
-    <span class="float-value">8h esta semana</span>
+    <span class="float-value">6 Lembretes Ativos</span>
   </div>
 
   <div class="hero-content">
@@ -1759,7 +1751,6 @@ gsap.to('.hero-content', {
 gsap.to('.float-card.c1', { y: -60, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.8 } });
 gsap.to('.float-card.c2', { y: -100, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.2 } });
 gsap.to('.float-card.c3', { y: -40, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 0.6 } });
-gsap.to('.float-card.c4', { y: -80, scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: 1.0 } });
 
 // Hero entrance animation
 gsap.from('.hero-badge', { y: 30, opacity: 0, duration: 0.8, delay: 0.3 });
@@ -1771,7 +1762,6 @@ gsap.from('.float-card', { scale: 0.85, opacity: 0, duration: 0.7, stagger: 0.15
 gsap.to('.float-card.c1', { y: '-=8', repeat: -1, yoyo: true, duration: 2.8, ease: 'sine.inOut', delay: 0 });
 gsap.to('.float-card.c2', { y: '-=12', repeat: -1, yoyo: true, duration: 3.2, ease: 'sine.inOut', delay: 0.5 });
 gsap.to('.float-card.c3', { y: '-=7', repeat: -1, yoyo: true, duration: 2.5, ease: 'sine.inOut', delay: 1 });
-gsap.to('.float-card.c4', { y: '-=10', repeat: -1, yoyo: true, duration: 3.5, ease: 'sine.inOut', delay: 0.8 });
 
 } // ═══ fim GSAP parte 1 ═══
 
