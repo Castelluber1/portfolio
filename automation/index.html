@@ -3,20 +3,20 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Caio Castelluber — Automação com IA e n8n</title>
+		<title>Caio Castelluber — Automação com IA</title>
 		<meta
 			name="description"
-			content="Construo automações com n8n e IA que eliminam trabalho manual e conectam seus sistemas. Caso real: onboarding de clientes de 3 horas para 3 minutos." />
+			content="Construo automações com IA que eliminam trabalho manual e conectam seus sistemas. Caso real: onboarding de clientes de 3 horas para 3 minutos." />
 		<link rel="canonical" href="https://www.castelluber.com/automacao" />
 		<link
 			rel="icon"
 			href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%236366f1'/><text y='22' x='6' font-size='18' font-family='sans-serif' fill='white' font-weight='bold'>C.</text></svg>" />
 		<meta
 			property="og:title"
-			content="Caio Castelluber — Automação com IA e n8n" />
+			content="Caio Castelluber — Automação com IA" />
 		<meta
 			property="og:description"
-			content="Construo automações com n8n e IA que eliminam trabalho manual e conectam seus sistemas. Veja o caso da UP Immigration: onboarding de 3 horas para 3 minutos." />
+			content="Construo automações com IA que eliminam trabalho manual e conectam seus sistemas. Veja o caso da UP Immigration: onboarding de 3 horas para 3 minutos." />
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content="https://www.castelluber.com/automacao" />
 		<meta property="og:locale" content="pt_BR" />
@@ -723,7 +723,7 @@
 				transform: translateY(0);
 			}
 
-			/* Panel 2: n8n flow visual */
+			/* Panel 2: sistema flow visual */
 			.flow-visual {
 				padding: 1.5rem;
 			}
@@ -2080,7 +2080,7 @@
 
 		<!-- HORIZONTAL SCROLL: COMO FUNCIONA -->
 		<section id="h-section" style="padding: 0">
-			<span class="h-section-label">Como funciona — scroll para avançar</span>
+			<span class="h-section-label">Como funciona</span>
 			<div class="h-track" id="h-track">
 				<!-- Panel 1: Trigger / Form -->
 				<div class="h-panel" style="background: var(--bg)">
@@ -2094,10 +2094,10 @@
 								Você define o gatilho — o sistema faz o resto.
 							</p>
 							<div class="h-tech-tags">
-								<span class="h-tag active">Typeform</span>
-								<span class="h-tag active">Webhooks</span>
-								<span class="h-tag">Google Forms</span>
-								<span class="h-tag">Calendly</span>
+								<span class="h-tag active">WhatsApp</span>
+								<span class="h-tag active">Email</span>
+								<span class="h-tag">Instagram</span>
+								<span class="h-tag">Telegram</span>
 								<span class="h-tag">Email</span>
 							</div>
 						</div>
@@ -2106,30 +2106,30 @@
 								<div class="vdot r"></div>
 								<div class="vdot y"></div>
 								<div class="vdot g"></div>
-								<div class="vtitle">intake-form — novo envio</div>
+								<div class="vtitle">novo contato recebido</div>
 							</div>
 							<div class="visual-body">
 								<div class="form-field">
 									<div class="form-field-label">Nome completo</div>
-									<div class="form-field-input">Ana Rodrigues</div>
+									<div class="form-field-input">Maria Oliveira</div>
 								</div>
 								<div class="form-field">
 									<div class="form-field-label">Email</div>
 									<div class="form-field-input">ana.r@email.com</div>
 								</div>
 								<div class="form-field">
-									<div class="form-field-label">Tipo de processo</div>
-									<div class="form-field-input">Express Entry — FSW</div>
+									<div class="form-field-label">Telefone</div>
+									<div class="form-field-input">(11) 98765-4321</div>
 								</div>
 								<div class="form-field">
-									<div class="form-field-label">Atualmente no Canadá?</div>
-									<div class="form-field-input">Não — processo Outland</div>
+									<div class="form-field-label">Como posso te ajudar?</div>
+									<div class="form-field-input">Serviços</div>
 								</div>
 								<button class="form-submit-btn" onclick="triggerForm(this)">
 									Enviar formulário
 								</button>
 								<div class="form-sent-msg" id="form-sent-msg">
-									✓ Enviado — webhook disparado para n8n
+									✓ Enviado — sistema notificado
 								</div>
 								<div class="webhook-trigger" id="webhook-trigger">
 									POST /webhook/intake → 200 OK · 84ms
@@ -2139,23 +2139,23 @@
 					</div>
 				</div>
 
-				<!-- Panel 2: n8n orchestration -->
+				<!-- Panel 2: sistema orchestration -->
 				<div class="h-panel" style="background: var(--bg2)">
 					<div class="h-panel-inner">
 						<div class="h-panel-text">
 							<div class="h-step-num">02 / 04 — Orquestração</div>
-							<h2>n8n decide<br />o que acontece.</h2>
+							<h2>O sistema decide<br />o que acontece.</h2>
 							<p>
-								Os dados chegam no n8n em milissegundos. O workflow lê, valida,
-								toma decisões por lógica condicional e distribui para os
-								sistemas certos — sem você tocar em nada.
+								Os dados chegam em milissegundos. O sistema lê, valida,
+								toma decisões por regras inteligentes e distribui para os
+								apps certos sem você tocar em nada.
 							</p>
 							<div class="h-tech-tags">
-								<span class="h-tag active">n8n</span>
-								<span class="h-tag">Supabase</span>
-								<span class="h-tag">REST API</span>
-								<span class="h-tag">Lógica condicional</span>
-								<span class="h-tag active">Webhooks</span>
+								<span class="h-tag active">Automação</span>
+								<span class="h-tag">Banco de dados</span>
+								<span class="h-tag">Integrações</span>
+								<span class="h-tag">Regras inteligentes</span>
+								<span class="h-tag active">Tempo real</span>
 							</div>
 						</div>
 						<div class="visual-box" id="panel2-visual">
@@ -2163,7 +2163,7 @@
 								<div class="vdot r"></div>
 								<div class="vdot y"></div>
 								<div class="vdot g"></div>
-								<div class="vtitle">n8n — workflow ativo</div>
+								<div class="vtitle">automação em execução</div>
 							</div>
 							<div class="flow-visual">
 								<div class="flow-row">
@@ -2175,19 +2175,19 @@
 									<div class="flow-connector" id="fc1"></div>
 									<div class="flow-node-box" id="fn2">
 										<div class="flow-node-icon">🔀</div>
-										<div class="flow-node-name">IF Node</div>
-										<div class="flow-node-type">Condition</div>
+										<div class="flow-node-name">Decisão</div>
+										<div class="flow-node-type">Condição</div>
 									</div>
 									<div class="flow-connector" id="fc2"></div>
 									<div class="flow-node-box" id="fn3">
 										<div class="flow-node-icon">🧠</div>
 										<div class="flow-node-name">Claude AI</div>
-										<div class="flow-node-type">HTTP Request</div>
+										<div class="flow-node-type">Integração</div>
 									</div>
 									<div class="flow-connector" id="fc3"></div>
 									<div class="flow-node-box" id="fn4">
 										<div class="flow-node-icon">💼</div>
-										<div class="flow-node-name">Twenty CRM</div>
+										<div class="flow-node-name">CRM</div>
 										<div class="flow-node-type">REST API</div>
 									</div>
 								</div>
@@ -2198,17 +2198,17 @@
 									</div>
 									<div class="log-line">
 										<span class="log-time">[09:47:03]</span>
-										<span class="log-info">→</span> IF: is_canada=false → rota
-										Outland
+										<span class="log-info">→</span> Regra: novo cliente → rota
+										onboarding
 									</div>
 									<div class="log-line">
 										<span class="log-time">[09:47:04]</span>
-										<span class="log-info">→</span> Claude API: analisando
+										<span class="log-info">→</span> IA: analisando
 										perfil...
 									</div>
 									<div class="log-line">
 										<span class="log-time">[09:47:05]</span>
-										<span class="log-ok">✓</span> Pessoa criada no Twenty CRM
+										<span class="log-ok">✓</span> Contato criado no CRM
 									</div>
 									<div class="log-line">
 										<span class="log-time">[09:47:05]</span>
@@ -2233,10 +2233,10 @@
 								cenário.
 							</p>
 							<div class="h-tech-tags">
-								<span class="h-tag active">Claude Sonnet</span>
-								<span class="h-tag">GPT-4o</span>
-								<span class="h-tag active">Prompt Engineering</span>
-								<span class="h-tag">Embeddings</span>
+								<span class="h-tag active">IA</span>
+								<span class="h-tag">Linguagem natural</span>
+								<span class="h-tag active">Contexto</span>
+								<span class="h-tag">Decisão inteligente</span>
 							</div>
 						</div>
 						<div class="visual-box" id="panel3-visual">
@@ -2245,13 +2245,13 @@
 								<div class="vdot y"></div>
 								<div class="vdot g"></div>
 								<div class="vtitle">
-									claude-sonnet-4-5 — análise em progresso
+									IA analisando
 								</div>
 							</div>
 							<div class="terminal-body">
 								<div>
 									<span class="t-comment"
-										>// Dados do cliente recebidos via n8n</span
+										>// Dados do cliente recebidos</span
 									>
 								</div>
 								<div>
@@ -2261,19 +2261,19 @@
 								<div>
 									&nbsp;&nbsp;<span class="t-key">"name"</span
 									><span class="t-text">:&nbsp;</span
-									><span class="t-val">"Ana Rodrigues"</span
+									><span class="t-val">"Maria Oliveira"</span
 									><span class="t-text">,</span>
 								</div>
 								<div>
-									&nbsp;&nbsp;<span class="t-key">"process"</span
+									&nbsp;&nbsp;<span class="t-key">"servico"</span
 									><span class="t-text">:&nbsp;</span
-									><span class="t-val">"Express Entry FSW"</span
+									><span class="t-val">"Consultoria"</span
 									><span class="t-text">,</span>
 								</div>
 								<div>
-									&nbsp;&nbsp;<span class="t-key">"location"</span
+									&nbsp;&nbsp;<span class="t-key">"origem"</span
 									><span class="t-text">:&nbsp;</span
-									><span class="t-val">"Outland"</span>
+									><span class="t-val">"Sao Paulo"</span>
 								</div>
 								<div><span class="t-text">}</span></div>
 								<div style="margin-top: 0.5rem">
@@ -2281,17 +2281,17 @@
 								</div>
 								<div style="margin-top: 0.3rem">
 									<span class="t-response"
-										>→ Documentos necessários: 8 itens</span
+										>→ Proximos passos: 4 acoes</span
 									>
 								</div>
 								<div>
 									<span class="t-response"
-										>→ Prioridade: Passaporte + IELTS</span
+										>→ Prioridade: Reuniao + proposta</span
 									>
 								</div>
 								<div>
 									<span class="t-response"
-										>→ Categoria: FSW Outland Standard</span
+										>→ Perfil: Novo cliente B2B</span
 									>
 								</div>
 								<div>
@@ -2301,10 +2301,10 @@
 								</div>
 								<div style="margin-top: 0.3rem">
 									<span class="t-prompt">$</span>
-									<span class="t-text">upload_to_supabase(docs_list)</span>
+									<span class="t-text">salvar_no_crm(perfil_cliente)</span>
 								</div>
 								<div>
-									<span class="t-response">✓ 8 documentos salvos</span>
+									<span class="t-response">✓ Perfil criado e salvo</span>
 									<span class="t-cursor"></span>
 								</div>
 							</div>
@@ -2324,9 +2324,9 @@
 								enquanto você está em outra reunião — ou dormindo.
 							</p>
 							<div class="h-tech-tags">
-								<span class="h-tag active">Twenty CRM</span>
+								<span class="h-tag active">CRM</span>
 								<span class="h-tag">Gmail</span>
-								<span class="h-tag active">Supabase</span>
+								<span class="h-tag active">Banco de dados</span>
 								<span class="h-tag">Slack</span>
 								<span class="h-tag">WhatsApp</span>
 							</div>
@@ -2346,9 +2346,9 @@
 										💼
 									</div>
 									<div class="output-info">
-										<div class="output-title">Twenty CRM — Pessoa criada</div>
+										<div class="output-title">CRM — Contato criado</div>
 										<div class="output-sub">
-											Ana Rodrigues · Express Entry FSW · Outland
+											Maria Oliveira · novo cliente · B2B
 										</div>
 									</div>
 									<div class="output-time">+0.8s</div>
@@ -2361,10 +2361,10 @@
 									</div>
 									<div class="output-info">
 										<div class="output-title">
-											Supabase — 8 documentos salvos
+											Banco de dados — perfil salvo
 										</div>
 										<div class="output-sub">
-											Lista personalizada por perfil FSW Outland
+											Dados organizados automaticamente
 										</div>
 									</div>
 									<div class="output-time">+1.2s</div>
@@ -2377,7 +2377,7 @@
 									</div>
 									<div class="output-info">
 										<div class="output-title">
-											Gmail — Email enviado ao cliente
+											Email — Mensagem enviada ao cliente
 										</div>
 										<div class="output-sub">
 											Lista de documentos + próximos passos
@@ -2392,9 +2392,9 @@
 										💬
 									</div>
 									<div class="output-info">
-										<div class="output-title">Slack — Time notificado</div>
+										<div class="output-title">Slack — Equipe notificada</div>
 										<div class="output-sub">
-											Novo cliente Ana R. — aguardando docs
+											Novo cliente Maria O. — aguardando retorno
 										</div>
 									</div>
 									<div class="output-time">+2.1s</div>
@@ -2468,9 +2468,9 @@
 							manual.
 						</p>
 						<div class="servico-tags">
-							<span class="servico-tag">Typeform</span>
-							<span class="servico-tag">n8n</span>
-							<span class="servico-tag">Twenty CRM</span>
+							<span class="servico-tag">WhatsApp</span>
+							<span class="servico-tag">Automação</span>
+							<span class="servico-tag">CRM</span>
 							<span class="servico-tag">Gmail</span>
 						</div>
 					</div>
@@ -2487,10 +2487,10 @@
 							contexto do negócio, não prompts genéricos.
 						</p>
 						<div class="servico-tags">
-							<span class="servico-tag">Claude API</span>
-							<span class="servico-tag">GPT-4o</span>
+							<span class="servico-tag">IA</span>
+							<span class="servico-tag">Linguagem natural</span>
 							<span class="servico-tag">Prompt Eng.</span>
-							<span class="servico-tag">n8n</span>
+							<span class="servico-tag">Automação</span>
 						</div>
 					</div>
 					<div class="servico-card reveal">
@@ -2506,10 +2506,10 @@
 							copiar e colar entre sistemas.
 						</p>
 						<div class="servico-tags">
-							<span class="servico-tag">REST API</span>
+							<span class="servico-tag">Integrações</span>
 							<span class="servico-tag">Webhooks</span>
-							<span class="servico-tag">Supabase</span>
-							<span class="servico-tag">Zapier → n8n</span>
+							<span class="servico-tag">Banco de dados</span>
+							<span class="servico-tag">Zapier → sistema</span>
 						</div>
 					</div>
 					<div class="servico-card reveal">
@@ -2527,7 +2527,7 @@
 							<span class="servico-tag">SEO</span>
 							<span class="servico-tag">Claude</span>
 							<span class="servico-tag">WordPress API</span>
-							<span class="servico-tag">n8n</span>
+							<span class="servico-tag">Automação</span>
 						</div>
 					</div>
 				</div>
@@ -2538,19 +2538,19 @@
 		<div class="marquee-wrap">
 			<div class="marquee-inner">
 				<div class="marquee-set">
-					<span>n8n</span><span>Claude API</span><span>Supabase</span
-					><span>Typeform</span><span>Twenty CRM</span><span>REST APIs</span
-					><span>Webhooks</span><span>GPT-4o</span><span>WordPress API</span
-					><span>Calendly</span><span>Make</span><span>Google Workspace</span
-					><span>Slack</span><span>Airtable</span><span>Prompt Engineering</span
+					<span>Automação</span><span>IA</span><span>Banco de dados</span
+					><span>WhatsApp</span><span>CRM</span><span>REST APIs</span
+					><span>Webhooks</span><span>Linguagem natural</span><span>WordPress API</span
+					><span>Telegram</span><span>Make</span><span>Google Workspace</span
+					><span>Slack</span><span>Planilhas</span><span>Configuração de IA</span
 					><span>Automação</span>
 				</div>
 				<div class="marquee-set" aria-hidden="true">
-					<span>n8n</span><span>Claude API</span><span>Supabase</span
-					><span>Typeform</span><span>Twenty CRM</span><span>REST APIs</span
-					><span>Webhooks</span><span>GPT-4o</span><span>WordPress API</span
-					><span>Calendly</span><span>Make</span><span>Google Workspace</span
-					><span>Slack</span><span>Airtable</span><span>Prompt Engineering</span
+					<span>Automação</span><span>IA</span><span>Banco de dados</span
+					><span>WhatsApp</span><span>CRM</span><span>REST APIs</span
+					><span>Webhooks</span><span>Linguagem natural</span><span>WordPress API</span
+					><span>Telegram</span><span>Make</span><span>Google Workspace</span
+					><span>Slack</span><span>Planilhas</span><span>Configuração de IA</span
 					><span>Automação</span>
 				</div>
 			</div>
@@ -2608,7 +2608,7 @@
 							<span>✅</span>
 							<span
 								>Formulário submetido → webhook dispara → dados chegam no
-								n8n.</span
+								sistema.</span
 							>
 						</div>
 						<div class="compare-item good">
@@ -2628,7 +2628,7 @@
 						<div class="compare-item good">
 							<span>✅</span>
 							<span
-								>CRM atualizado, documentos salvos no Supabase, time no Slack
+								>CRM atualizado, documentos salvos no banco de dados, time no Slack
 								notificado.</span
 							>
 						</div>
@@ -2682,7 +2682,7 @@
 							email de confirmação.
 						</p>
 						<p style="margin-top: 1rem">
-							Construímos um sistema completo com n8n, Claude e Supabase. Hoje,
+							Construímos um sistema completo com sistema e IA. Hoje,
 							quando um cliente preenche o intake form, em menos de 3 segundos o
 							CRM está atualizado, os documentos filtrados por IA e o email
 							enviado — automaticamente.
@@ -2723,7 +2723,7 @@
 							</div>
 							<div>
 								<div class="caso-step-text">Cliente preenche o intake form</div>
-								<div class="caso-step-sub">Typeform → webhook dispara</div>
+								<div class="caso-step-sub">Formulário enviado</div>
 							</div>
 						</div>
 						<div class="caso-connector"></div>
@@ -2734,9 +2734,9 @@
 								🔀
 							</div>
 							<div>
-								<div class="caso-step-text">n8n processa e roteio o caso</div>
+								<div class="caso-step-text">sistema processa e roteio o caso</div>
 								<div class="caso-step-sub">
-									Inland vs Outland · tipo de visto
+									qualificação e próximos passos
 								</div>
 							</div>
 						</div>
@@ -2762,7 +2762,7 @@
 								💼
 							</div>
 							<div>
-								<div class="caso-step-text">Twenty CRM atualizado via API</div>
+								<div class="caso-step-text">CRM atualizado automaticamente</div>
 								<div class="caso-step-sub">Pessoa + oportunidade criadas</div>
 							</div>
 						</div>
@@ -2844,7 +2844,7 @@
 		<!-- FOOTER -->
 		<footer>
 			<div class="footer-name">Caio.</div>
-			<div class="footer-title">AI & Automation · n8n · Claude · APIs</div>
+			<div class="footer-title">AI & Automation · Claude · Integracoes</div>
 			<p class="footer-cta">
 				Tem um processo manual que te incomoda?<br />
 				<strong
@@ -3210,7 +3210,7 @@
 
 								// Trigger panel4 outputs when reaching last panel
 								if (current === 3) triggerOutputs();
-								// Trigger n8n flow when reaching panel2
+								// Trigger sistema flow when reaching panel2
 								if (current === 1) triggerFlow();
 							},
 						},
@@ -3251,7 +3251,7 @@
 				}, 600);
 			}
 
-			// Panel 2: n8n flow animation
+			// Panel 2: sistema flow animation
 			let flowPlayed = false;
 			function triggerFlow() {
 				if (flowPlayed) return;
