@@ -1053,10 +1053,6 @@
 			/* ── CASOS ── */
 			.caso-featured {
 				margin-top: 3rem;
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				gap: 3rem;
-				align-items: center;
 				border: 1px solid var(--card-border);
 				border-radius: 20px;
 				padding: 3rem;
@@ -1111,9 +1107,12 @@
 			}
 			.caso-metrics {
 				display: grid;
-				grid-template-columns: 1fr 1fr;
+				grid-template-columns: repeat(4, 1fr);
 				gap: 1.25rem;
 				margin-top: 2rem;
+			}
+			@media (max-width: 640px) {
+				.caso-metrics { grid-template-columns: 1fr 1fr; }
 			}
 			.caso-metric-item {
 				padding: 1.25rem;
@@ -2859,27 +2858,27 @@
 						</p>
 						<div class="caso-metrics">
 							<div class="caso-metric-item">
-								<div class="caso-metric-num counter" data-target="8">0</div>
+								<div class="caso-metric-num">3 min</div>
 								<div class="caso-metric-desc">
-									horas por semana recuperadas em trabalho de onboarding
+									onboarding completo — era 3 horas
 								</div>
 							</div>
 							<div class="caso-metric-item">
-								<div class="caso-metric-num">98%</div>
+								<div class="caso-metric-num counter" data-target="550">0</div>
 								<div class="caso-metric-desc">
-									redução no tempo de resposta inicial ao cliente
+									clientes migrados para o sistema
 								</div>
 							</div>
 							<div class="caso-metric-item">
-								<div class="caso-metric-num counter" data-target="207">0</div>
+								<div class="caso-metric-num">3</div>
 								<div class="caso-metric-desc">
-									notas migradas automaticamente no CRM na fase de transição
+									ferramentas substituídas por um só sistema
 								</div>
 							</div>
 							<div class="caso-metric-item">
 								<div class="caso-metric-num">0</div>
 								<div class="caso-metric-desc">
-									intervenções manuais necessárias no processo de onboarding
+									planilhas. tudo no CRM.
 								</div>
 							</div>
 						</div>
@@ -2887,66 +2886,6 @@
 							Ver demo completo
 							<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
 						</a>
-					</div>
-					<div class="nb-preview">
-						<div class="nb-sidebar">
-							<div class="nb-logo">NB</div>
-							<div class="nb-nav-item nb-nav-active">Pessoas</div>
-							<div class="nb-nav-item">Casos</div>
-							<div class="nb-nav-item">Opps</div>
-							<div class="nb-nav-item">Tarefas</div>
-							<div class="nb-nav-item">Docs</div>
-						</div>
-						<div class="nb-main">
-							<div class="nb-header">
-								<div class="nb-header-title">Pessoas</div>
-								<div class="nb-chips">
-									<span class="nb-chip nb-chip-green">● 23 ativos</span>
-									<span class="nb-chip">+ Novo</span>
-								</div>
-							</div>
-							<div class="nb-stats">
-								<div class="nb-stat">
-									<div class="nb-stat-num">550</div>
-									<div class="nb-stat-label">contatos</div>
-								</div>
-								<div class="nb-stat">
-									<div class="nb-stat-num">52</div>
-									<div class="nb-stat-label">casos</div>
-								</div>
-								<div class="nb-stat">
-									<div class="nb-stat-num">138</div>
-									<div class="nb-stat-label">oportunidades</div>
-								</div>
-							</div>
-							<div class="nb-table">
-								<div class="nb-row nb-row-header">
-									<span>Nome</span><span>Status</span><span>Próx. ação</span>
-								</div>
-								<div class="nb-row">
-									<span>Ana Rodrigues</span>
-									<span><span class="nb-badge nb-badge-green">Ativo</span></span>
-									<span class="nb-muted">Docs pendentes</span>
-								</div>
-								<div class="nb-row">
-									<span>Carlos Mendes</span>
-									<span><span class="nb-badge nb-badge-copper">Revisão</span></span>
-									<span class="nb-muted">Reunião agendada</span>
-								</div>
-								<div class="nb-row">
-									<span>Mia Santos</span>
-									<span><span class="nb-badge nb-badge-green">Ativo</span></span>
-									<span class="nb-muted">Aguardando aprovação</span>
-								</div>
-								<div class="nb-row">
-									<span>Pedro Alves</span>
-									<span><span class="nb-badge nb-badge-green">Ativo</span></span>
-									<span class="nb-muted">Proposta enviada</span>
-								</div>
-							</div>
-							<div class="nb-live">● sistema ao vivo</div>
-						</div>
-					</div>
 				</div>
 
 				<!-- Depoimento -->
