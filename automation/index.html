@@ -1165,6 +1165,155 @@
 				transform: translateX(3px);
 			}
 
+			/* Northbound dashboard preview */
+			.nb-preview {
+				display: flex;
+				height: 100%;
+				min-height: 360px;
+				border-radius: 14px;
+				overflow: hidden;
+				border: 1px solid #DDD5C0;
+				box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+				font-family: "Hanken Grotesk","Space Grotesk",sans-serif;
+				transform: perspective(800px) rotateY(-3deg) rotateX(1deg);
+				transition: transform 0.4s ease;
+			}
+			.nb-preview:hover {
+				transform: perspective(800px) rotateY(0deg) rotateX(0deg);
+			}
+			.nb-sidebar {
+				width: 56px;
+				background: #14261D;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				padding: 16px 0;
+				gap: 2px;
+				flex-shrink: 0;
+			}
+			.nb-logo {
+				font-size: 0.5rem;
+				font-weight: 700;
+				color: #F6F3EA;
+				letter-spacing: 0.08em;
+				padding: 5px 4px;
+				border: 1px solid rgba(246,243,234,0.25);
+				border-radius: 4px;
+				margin-bottom: 14px;
+			}
+			.nb-nav-item {
+				font-size: 0.48rem;
+				color: #7A8A80;
+				padding: 5px 6px;
+				width: 46px;
+				text-align: center;
+				border-radius: 4px;
+				letter-spacing: 0.03em;
+			}
+			.nb-nav-active {
+				background: rgba(246,243,234,0.12);
+				color: #F6F3EA;
+			}
+			.nb-main {
+				flex: 1;
+				background: #F6F3EA;
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+			}
+			.nb-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 9px 14px;
+				border-bottom: 1px solid #DDD5C0;
+				background: #FDFBF4;
+				flex-shrink: 0;
+			}
+			.nb-header-title {
+				font-size: 0.62rem;
+				font-weight: 700;
+				color: #14261D;
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+			}
+			.nb-chips { display: flex; gap: 5px; }
+			.nb-chip {
+				font-size: 0.48rem;
+				padding: 2px 7px;
+				border-radius: 20px;
+				border: 1px solid #DDD5C0;
+				color: #3C5247;
+			}
+			.nb-chip-green {
+				background: #E4EDE4;
+				border-color: #2E7D54;
+				color: #1E4D38;
+			}
+			.nb-stats {
+				display: grid;
+				grid-template-columns: repeat(3,1fr);
+				gap: 1px;
+				background: #DDD5C0;
+				border-bottom: 1px solid #DDD5C0;
+				flex-shrink: 0;
+			}
+			.nb-stat { background: #FDFBF4; padding: 8px 10px; }
+			.nb-stat-num {
+				font-size: 1.1rem;
+				font-weight: 700;
+				color: #1E4D38;
+				line-height: 1;
+			}
+			.nb-stat-label {
+				font-size: 0.42rem;
+				color: #7A8A80;
+				text-transform: uppercase;
+				letter-spacing: 0.07em;
+				margin-top: 2px;
+			}
+			.nb-table { flex: 1; overflow: hidden; }
+			.nb-row {
+				display: grid;
+				grid-template-columns: 2fr 1.2fr 1.4fr;
+				padding: 6px 14px;
+				border-bottom: 1px solid #DDD5C0;
+				font-size: 0.5rem;
+				color: #14261D;
+				align-items: center;
+			}
+			.nb-row-header {
+				background: #EFEAD9;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.07em;
+				font-size: 0.42rem;
+				color: #7A8A80;
+			}
+			.nb-badge {
+				display: inline-block;
+				padding: 2px 6px;
+				border-radius: 3px;
+				font-size: 0.44rem;
+				font-weight: 600;
+			}
+			.nb-badge-green { background: #E4EDE4; color: #1E4D38; }
+			.nb-badge-copper { background: #F3E4D4; color: #B4632B; }
+			.nb-muted { color: #7A8A80; }
+			.nb-live {
+				padding: 7px 14px;
+				font-size: 0.46rem;
+				color: #2E7D54;
+				letter-spacing: 0.09em;
+				text-transform: uppercase;
+				font-weight: 600;
+				background: #EFEAD9;
+				border-top: 1px solid #DDD5C0;
+				flex-shrink: 0;
+				animation: nb-pulse 2s ease-in-out infinite;
+			}
+			@keyframes nb-pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+
 			/* Flow diagram for caso */
 			.caso-flow {
 				display: flex;
@@ -2708,12 +2857,6 @@
 							aquele perfil específico, cadastrar no CRM, criar pasta, enviar
 							email de confirmação.
 						</p>
-						<p style="margin-top: 1rem">
-							Construímos um sistema completo com sistema e IA. Hoje,
-							quando um cliente preenche o intake form, em menos de 3 segundos o
-							CRM está atualizado, os documentos filtrados por IA e o email
-							enviado — automaticamente.
-						</p>
 						<div class="caso-metrics">
 							<div class="caso-metric-item">
 								<div class="caso-metric-num counter" data-target="8">0</div>
@@ -2745,71 +2888,63 @@
 							<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
 						</a>
 					</div>
-					<div class="caso-flow">
-						<div class="caso-step">
-							<div
-								class="caso-step-icon"
-								style="background: rgba(99, 102, 241, 0.12)">
-								📋
-							</div>
-							<div>
-								<div class="caso-step-text">Cliente preenche o intake form</div>
-								<div class="caso-step-sub">Formulário enviado</div>
-							</div>
+					<div class="nb-preview">
+						<div class="nb-sidebar">
+							<div class="nb-logo">NB</div>
+							<div class="nb-nav-item nb-nav-active">Pessoas</div>
+							<div class="nb-nav-item">Casos</div>
+							<div class="nb-nav-item">Opps</div>
+							<div class="nb-nav-item">Tarefas</div>
+							<div class="nb-nav-item">Docs</div>
 						</div>
-						<div class="caso-connector"></div>
-						<div class="caso-step">
-							<div
-								class="caso-step-icon"
-								style="background: rgba(6, 182, 212, 0.12)">
-								🔀
-							</div>
-							<div>
-								<div class="caso-step-text">sistema processa e roteio o caso</div>
-								<div class="caso-step-sub">
-									qualificação e próximos passos
+						<div class="nb-main">
+							<div class="nb-header">
+								<div class="nb-header-title">Pessoas</div>
+								<div class="nb-chips">
+									<span class="nb-chip nb-chip-green">● 23 ativos</span>
+									<span class="nb-chip">+ Novo</span>
 								</div>
 							</div>
-						</div>
-						<div class="caso-connector"></div>
-						<div class="caso-step">
-							<div
-								class="caso-step-icon"
-								style="background: rgba(16, 185, 129, 0.12)">
-								🧠
-							</div>
-							<div>
-								<div class="caso-step-text">
-									Claude filtra documentos necessários
+							<div class="nb-stats">
+								<div class="nb-stat">
+									<div class="nb-stat-num">550</div>
+									<div class="nb-stat-label">contatos</div>
 								</div>
-								<div class="caso-step-sub">Lista personalizada por perfil</div>
-							</div>
-						</div>
-						<div class="caso-connector"></div>
-						<div class="caso-step">
-							<div
-								class="caso-step-icon"
-								style="background: rgba(245, 158, 11, 0.12)">
-								💼
-							</div>
-							<div>
-								<div class="caso-step-text">CRM atualizado automaticamente</div>
-								<div class="caso-step-sub">Pessoa + oportunidade criadas</div>
-							</div>
-						</div>
-						<div class="caso-connector"></div>
-						<div class="caso-step">
-							<div
-								class="caso-step-icon"
-								style="background: rgba(99, 102, 241, 0.12)">
-								📧
-							</div>
-							<div>
-								<div class="caso-step-text">Email enviado automaticamente</div>
-								<div class="caso-step-sub">
-									Com lista de docs + próximos passos
+								<div class="nb-stat">
+									<div class="nb-stat-num">52</div>
+									<div class="nb-stat-label">casos</div>
+								</div>
+								<div class="nb-stat">
+									<div class="nb-stat-num">138</div>
+									<div class="nb-stat-label">oportunidades</div>
 								</div>
 							</div>
+							<div class="nb-table">
+								<div class="nb-row nb-row-header">
+									<span>Nome</span><span>Status</span><span>Próx. ação</span>
+								</div>
+								<div class="nb-row">
+									<span>Ana Rodrigues</span>
+									<span><span class="nb-badge nb-badge-green">Ativo</span></span>
+									<span class="nb-muted">Docs pendentes</span>
+								</div>
+								<div class="nb-row">
+									<span>Carlos Mendes</span>
+									<span><span class="nb-badge nb-badge-copper">Revisão</span></span>
+									<span class="nb-muted">Reunião agendada</span>
+								</div>
+								<div class="nb-row">
+									<span>Mia Santos</span>
+									<span><span class="nb-badge nb-badge-green">Ativo</span></span>
+									<span class="nb-muted">Aguardando aprovação</span>
+								</div>
+								<div class="nb-row">
+									<span>Pedro Alves</span>
+									<span><span class="nb-badge nb-badge-green">Ativo</span></span>
+									<span class="nb-muted">Proposta enviada</span>
+								</div>
+							</div>
+							<div class="nb-live">● sistema ao vivo</div>
 						</div>
 					</div>
 				</div>
