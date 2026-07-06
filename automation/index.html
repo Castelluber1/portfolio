@@ -1138,6 +1138,33 @@
 				line-height: 1.4;
 			}
 
+			.caso-demo-btn {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				margin-top: 1.75rem;
+				padding: 0.65rem 1.4rem;
+				background: linear-gradient(135deg, var(--indigo), var(--cyan));
+				color: #fff;
+				font-family: "Space Grotesk", sans-serif;
+				font-size: 0.88rem;
+				font-weight: 600;
+				letter-spacing: 0.01em;
+				border-radius: 8px;
+				text-decoration: none;
+				transition: opacity 0.2s, transform 0.2s;
+			}
+			.caso-demo-btn:hover {
+				opacity: 0.88;
+				transform: translateY(-1px);
+			}
+			.caso-demo-btn svg {
+				transition: transform 0.2s;
+			}
+			.caso-demo-btn:hover svg {
+				transform: translateX(3px);
+			}
+
 			/* Flow diagram for caso */
 			.caso-flow {
 				display: flex;
@@ -2713,6 +2740,10 @@
 								</div>
 							</div>
 						</div>
+						<a href="/upimmigration" target="_blank" class="caso-demo-btn">
+							Ver demo completo
+							<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						</a>
 					</div>
 					<div class="caso-flow">
 						<div class="caso-step">
