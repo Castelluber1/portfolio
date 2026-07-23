@@ -1378,11 +1378,156 @@ h1 em { font-style: italic; color: var(--green-bright); }
   .grid { grid-template-columns: 1fr; }
   .receipt-wrap { position: static; max-width: 460px; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE — reflow completo abaixo de 768px
+   ════════════════════════════════════════════════════════════ */
+.nav-toggle-input { position: absolute; opacity: 0; pointer-events: none; }
+.hamburger, .sidebar-scrim { display: none; }
+
+@media (max-width: 768px) {
+  body { overflow-x: hidden; }
+
+  /* ── sidebar → off-canvas drawer, aberta via checkbox CSS-only ── */
+  .hamburger {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; top: 14px; left: 14px; z-index: 1000;
+    width: 40px; height: 40px; border-radius: 9px;
+    background: var(--ink); cursor: pointer;
+  }
+  .hamburger span, .hamburger span::before, .hamburger span::after {
+    content: ""; display: block; width: 18px; height: 2px; background: #F6F3EA;
+    transition: transform .2s;
+  }
+  .hamburger span { position: relative; }
+  .hamburger span::before { position: absolute; top: -6px; }
+  .hamburger span::after { position: absolute; top: 6px; }
+
+  .sidebar-scrim {
+    position: fixed; inset: 0; z-index: 490;
+    background: rgba(20,38,29,.45);
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s;
+  }
+
+  .app { display: block; }
+  .sidebar {
+    position: fixed; top: 0; left: 0; height: 100vh; z-index: 500;
+    width: 78vw; max-width: 280px;
+    transform: translateX(-100%);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1);
+    box-shadow: 0 0 40px rgba(0,0,0,.35);
+  }
+  .brand { padding-top: 56px; }
+
+  .nav-toggle-input:checked ~ .sidebar { transform: translateX(0); }
+  .nav-toggle-input:checked ~ .sidebar-scrim { opacity: 1; pointer-events: auto; }
+
+  /* ── conteúdo principal ocupa a tela toda, sem largura mínima ── */
+  .main { min-width: 0; width: 100%; padding: 64px 16px 50px; }
+
+  h1 { font-size: 24px; max-width: none; }
+  .masthead { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .masthead-right { text-align: left; }
+
+  .pg-head { flex-wrap: wrap; gap: 12px; }
+  .pg-tools { flex-wrap: wrap; }
+  .pg-search { min-width: 0; flex: 1; }
+
+  .attn-row {
+    grid-template-columns: 36px 1fr; grid-template-areas:
+      "ico what" "ico who" "age btn";
+    row-gap: 6px;
+  }
+  .attn-ico { grid-area: ico; }
+  .attn-what { grid-area: what; }
+  .attn-who { grid-area: who; }
+  .age { grid-area: age; justify-self: start; }
+  .attn-row .btn { grid-area: btn; justify-self: end; }
+
+  .pipe-bar { flex-wrap: wrap; height: auto; }
+  .pipe-seg { flex: 1 1 45%; min-width: 45%; padding: 10px 12px; }
+
+  /* ── grid principal e sub-grids empilham em 1 coluna ── */
+  .grid { gap: 24px; }
+  .fin-stats { grid-template-columns: 1fr; }
+  .auto-grid { grid-template-columns: 1fr; }
+  .auto-card { flex-direction: column; }
+
+  /* tabelas ledger e kanban: scroll horizontal contido, não a página inteira */
+  .lt-wrap { overflow-x: auto; }
+  .lt { min-width: 640px; }
+  .kb { overflow-x: auto; padding-bottom: 6px; }
+  .kb-col { min-width: 220px; }
+
+  .ib-item { grid-template-columns: 32px 1fr auto; gap: 10px; padding: 12px; }
+
+  /* ── recibo ── */
+  .receipt-wrap { max-width: 100%; }
+  .receipt { padding: 20px 16px 24px; transform: none; }
+  .receipt-tear { transform: none; }
+  .r-total-big { font-size: 32px; }
+  .info-pop {
+    position: fixed; left: 16px; right: 16px; top: 50%; bottom: auto;
+    transform: translateY(-50%) scale(.97);
+    max-height: 80vh; overflow-y: auto;
+  }
+  .info-pop.on { transform: translateY(-50%) scale(1); }
+
+  /* ── telefone flutuante: overlay quase full-screen em vez de dock lateral ── */
+  .phone {
+    right: 50%; top: 50%; left: auto;
+    width: min(86vw, 330px); height: min(78vh, 640px);
+    transform: translate(50%, -50%) scale(.9);
+    opacity: 0; pointer-events: none;
+    transition: opacity .5s, transform .5s cubic-bezier(.25,.9,.3,1);
+  }
+  .phone.on { transform: translate(50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
+
+  /* ── card de template: centralizado, sem depender da largura da sidebar ── */
+  .tpl { left: 50%; top: 18vh; width: min(90vw, 430px); transform: translateX(-50%) translateY(16px) scale(.97); }
+  .tpl.on { transform: translateX(-50%) translateY(0) scale(1); }
+  .tpl.fly {
+    transform: translate(calc(-50% + 30vw), 60vh) scale(.15) rotate(3deg);
+  }
+
+  /* ── toast ── */
+  .ntoast { left: 16px; right: 16px; top: 16px; width: auto; max-width: calc(100vw - 32px); }
+  .ntoast.on { transform: none; }
+
+  /* ── legenda: permite quebra de linha ── */
+  .caption-bar {
+    left: 16px; right: 16px; transform: translateY(90px);
+    max-width: none; width: auto; white-space: normal;
+    text-align: left; bottom: 16px;
+  }
+  .caption-bar.on { transform: translateY(0); }
+
+  .demo-reset { left: 12px; bottom: 12px; padding: 6px 11px; font-size: 9.5px; }
+
+  /* ── mini-filme: empilha verticalmente ── */
+  .mf-modal { padding: 18px 16px 16px; max-height: 92vh; overflow-y: auto; }
+  .mf-head { flex-wrap: wrap; gap: 10px; }
+  .mf-tally { padding-right: 0; gap: 14px; }
+  .mf-body {
+    grid-template-columns: 1fr; grid-template-rows: auto auto auto;
+    height: auto; gap: 14px;
+  }
+  .mf-mid { height: 220px; }
+  .mf-phone { justify-self: center; width: min(78vw, 260px); height: 360px; }
+  .mf-footer { flex-wrap: wrap; }
+  .mf-final { position: relative; margin-top: 10px; flex-wrap: wrap; }
+}
 </style>
 </head>
 <body>
 
 <div class="app">
+
+  <!-- checkbox CSS-only: controla a sidebar off-canvas em mobile -->
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
+  <label for="nav-toggle" class="hamburger" aria-label="Abrir menu"><span></span></label>
+  <label for="nav-toggle" class="sidebar-scrim"></label>
 
   <!-- ═══════ SIDEBAR ═══════ -->
   <aside class="sidebar">
